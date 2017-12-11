@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="QuestionDao">
+  	<insert id="insertNewQuestion" parameterType="QuestionVO">
+  		INSERT INTO	QUESTION
+  		(
+  			QUESTION_ID
+			, MEMBER_ID
+			, SUBJECT
+			, CONTENT
+			, WRITE_DATE
+			, CATEGORY_ID
+			, ATTACHMENT_ID
+  		)
+  		VALUES
+  		(
+  			QUESTION_ID_SEQ.NEXTVAL
+  			, #{memberId}
+  			, #{subject}
+  			, #{content}
+  			, SYSDATE
+  			, #{categoryId}
+  			, #{attachmentId}
+  		)
+  	</insert>
+  </mapper>

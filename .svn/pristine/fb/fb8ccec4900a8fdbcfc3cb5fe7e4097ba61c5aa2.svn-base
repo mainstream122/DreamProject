@@ -1,0 +1,5 @@
+package com.ktds.question.dao;
+
+public interface QuestionDao {
+	public boolean insertNewQuestion();
+}

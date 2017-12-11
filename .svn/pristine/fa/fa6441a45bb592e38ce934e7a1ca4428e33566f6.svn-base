@@ -1,0 +1,10 @@
+package com.ktds.attachment.service;
+
+import com.ktds.attachment.vo.AttachmentVO;
+
+public interface AttachmentService {
+	
+	public boolean createFile(AttachmentVO attachmentVO); 
+	
+	public AttachmentVO readAttachmentById(int attachmentId);
+}

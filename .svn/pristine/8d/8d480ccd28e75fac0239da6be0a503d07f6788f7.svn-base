@@ -1,0 +1,14 @@
+package com.ktds.question.dao;
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+
+import com.ktds.question.vo.QuestionVO;
+
+public class QuestionDaoImpl extends SqlSessionDaoSupport implements QuestionDao {
+	
+	@Override
+	public int insertNewQuestion(QuestionVO questionVO) {
+		return getSqlSession().insert("QuestionDao.insertNewQuestion", questionVO);
+	}
+
+}

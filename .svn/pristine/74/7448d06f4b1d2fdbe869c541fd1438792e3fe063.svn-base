@@ -1,0 +1,11 @@
+package com.ktds.question.dao;
+
+public class QuestionDaoImpl implements QuestionDao {
+
+	@Override
+	public boolean insertNewQuestion() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

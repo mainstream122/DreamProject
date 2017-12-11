@@ -1,0 +1,33 @@
+package com.ktds.car.vo;
+
+public class CarVO {
+	private String carId;
+	private String carName; 
+	private String carTypeFlag;      
+	private String html;
+	
+	public String getCarId() {
+		return carId;
+	}
+	public void setCarId(String carId) {
+		this.carId = carId;
+	}
+	public String getCarName() {
+		return carName;
+	}
+	public void setCarName(String carName) {
+		this.carName = carName;
+	}
+	public String getCarTypeFlag() {
+		return carTypeFlag;
+	}
+	public void setCarTypeFlag(String carTypeFlag) {
+		this.carTypeFlag = carTypeFlag;
+	}
+	public String getHtml() {
+		return html;
+	}
+	public void setHtml(String html) {
+		this.html = html;
+	}
+}

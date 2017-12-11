@@ -1,0 +1,18 @@
+package com.ktds.question.vo;
+
+import com.ktds.category.vo.CategoryVO;
+import com.ktds.member.vo.MemberVO;
+
+public class QuestionVO {
+	private int questionId;
+	private String memberId;
+	private String subject;
+	private String content;
+	private String writeDate;
+	private int categoryId;
+	private int attachmentId;
+	
+	private MemberVO memberVO;
+	
+	private CategoryVO categoryVO;
+}

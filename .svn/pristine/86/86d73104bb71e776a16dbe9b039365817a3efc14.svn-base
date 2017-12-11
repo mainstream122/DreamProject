@@ -1,0 +1,1275 @@
+package com.ktds.car.web;
+
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.OracleLobHandler;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.ktds.car.service.CarService;
+import com.ktds.car.vo.CarVO;
+
+import java.sql.Clob;
+
+@Controller
+public class CarController {
+	
+	private CarService carService;
+
+	public void setCarService(CarService carService) {
+		this.carService = carService;
+	}
+
+	@RequestMapping("/car/{carId}")
+	public ModelAndView viewCarDetail(@PathVariable int carId) {
+		CarVO carVO = carService.readCarById(carId);
+		ModelAndView view = new ModelAndView();
+		view.setViewName("car/details2");
+		view.addObject("carVO", carVO);
+		
+		return view;
+	}
+	
+	@RequestMapping("/car/insert")
+	public void insertCar() {
+		CarVO carVO = new CarVO();
+		carVO.setCarName("코나");
+		carVO.setCarTypeFlag("2");
+		carVO.setHtml("<title>Insert title here</title>\r\n" + 
+				"<link rel=\"stylesheet\" href=\"/DreamProject/css/kona-style.css\" />\r\n" + 
+				"<link rel=\"stylesheet\" href=\"http://icono-49d6.kxcdn.com/icono.min.css\">\r\n" + 
+				"\r\n" + 
+				"<script type=\"text/javascript\" src=\"/DreamProject/js/jquery-3.2.1.min.js\"></script>\r\n" + 
+				"<script type=\"text/javascript\" src=\"/DreamProject/js/dream_slider.js\"></script>\r\n" + 
+				"<script type=\"text/javascript\">\r\n" + 
+				"$().ready(function(){\r\n" + 
+				"	$(\".rolling_kona1 ul\").each(function(idx, obj) {\r\n" + 
+				"		initSlideListTransition($(obj));\r\n" + 
+				"	});\r\n" + 
+				"	//slideListTransition($(\".rolling_kona1 ul\"), 1, 5000, function(){}, function(){});\r\n" + 
+				"	$(\".prev-btn img\").click(function(){\r\n" + 
+				"		slideListTransition($(this).closest(\"div\").find(\"ul\"), +1, 3000, function(){}, function(){});\r\n" + 
+				"	});\r\n" + 
+				"	$(\".next-btn img\").click(function(){\r\n" + 
+				"		slideListTransition($(this).closest(\"div\").find(\"ul\"), -1, 3000, function(){}, function(){});\r\n" + 
+				"	});\r\n" + 
+				"	\r\n" + 
+				"	$(\".moveBtn\").click(function(e) {\r\n" + 
+				"		var movePage = \"#showroom-cont-\" + $(this).data(\"page\");\r\n" + 
+				"		\r\n" + 
+				"		var topPosition = $(\"#showroom-cont-\" + $(this).data(\"page\")).offset().top;\r\n" + 
+				"		\r\n" + 
+				"		$(\"html, \" + movePage).stop().animate({scrollTop : topPosition + \"px\"});\r\n" + 
+				"	});\r\n" + 
+				"});\r\n" + 
+				"\r\n" + 
+				"\r\n" + 
+				"function popupOpen(){\r\n" + 
+				"\r\n" + 
+				"	var popUrl = \"https://www.facebook.com/login.php?skip_api_login=1&api_key=140586622674265&signed_next=1&next=https%3A%2F%2Fwww.facebook.com%2Fv2.5%2Fdialog%2Fshare%3Fredirect_uri%3Dhttp%253A%252F%252Fs7.addthis.com%252Fstatic%252Fthankyou.html%26display%3Dpopup%26href%3Dhttp%253A%252F%252Fwww.hyundai.com%252Fkr%252Fshowroom.do%253FcarCd1%253DRD005%2526WT.ac%253Dgnb_carkind_accent%2523a%26title%3D%25EC%2597%2591%25EC%2584%25BC%25ED%258A%25B8%2B%25EA%25B3%25B5%25EC%258B%259D%2B%25ED%258E%2598%25EC%259D%25B4%25EC%25A7%2580%2B%257C%2B%25ED%2598%2584%25EB%258C%2580%25EC%259E%2590%25EB%258F%2599%25EC%25B0%25A8%26description%26picture%26client_id%3D140586622674265%26ret%3Dlogin&cancel_url=http%3A%2F%2Fs7.addthis.com%2Fstatic%2Fthankyou.html%3Ferror_code%3D4201%26error_message%3DUser%2Bcanceled%2Bthe%2BDialog%2Bflow%23_%3D_&display=popup&locale=ko_KR\";	//팝업창에 출력될 페이지 URL\r\n" + 
+				"\r\n" + 
+				"	var popOption = \"width=400, height=400, resizable=no, scrollbars=no, status=no;\";    //팝업창 옵션(optoin)\r\n" + 
+				"\r\n" + 
+				"		window.open(popUrl,\"\",popOption);\r\n" + 
+				"\r\n" + 
+				"}\r\n" + 
+				"\r\n" + 
+				"function popupOpen1(){\r\n" + 
+				"\r\n" + 
+				"	var popUrl = \"https://twitter.com/intent/tweet?text=%EC%97%91%EC%84%BC%ED%8A%B8%20%EA%B3%B5%EC%8B%9D%20%ED%8E%98%EC%9D%B4%EC%A7%80%20%7C%20%ED%98%84%EB%8C%80%EC%9E%90%EB%8F%99%EC%B0%A8&url=http%3A%2F%2Fwww.hyundai.com%2Fkr%2Fshowroom.do%3FcarCd1%3DRD005%26WT.ac%3Dgnb_carkind_accent%23a&related=\";	//팝업창에 출력될 페이지 URL\r\n" + 
+				"\r\n" + 
+				"	var popOption = \"width=400, height=400, resizable=no, scrollbars=no, status=no;\";    //팝업창 옵션(optoin)\r\n" + 
+				"\r\n" + 
+				"		window.open(popUrl,\"\",popOption);\r\n" + 
+				"\r\n" + 
+				"}\r\n" + 
+				"\r\n" + 
+				"function popupOpen2(){\r\n" + 
+				"\r\n" + 
+				"	var popUrl = \"https://story.kakao.com/s/login?continue=https%3A%2F%2Fstory.kakao.com%2Fshare%3Furl%3Dhttp%253A%252F%252Fwww.hyundai.com%252Fkr%252Fshowroom.do%253FcarCd1%253DRD005%2526WT.ac%253Dgnb_carkind_accent%2523a&display=popup&referrer=http://www.addthis.com/bookmark.php?v=300&winname=addthis&pub=ra-58a563fba1b0c343&source=men-300&lng=ko&s=kakao&url=http%3A%2F%2Fwww.hyundai.com%2Fkr%2Fshowroom.do%3FcarCd1%3DRD005%26WT.ac%3Dgnb_carkind_accent%23a&title=%EC%97%91%EC%84%BC%ED%8A%B8%20%EA%B3%B5%EC%8B%9D%20%ED%8E%98%EC%9D%B4%EC%A7%80%20%7C%20%ED%98%84%EB%8C%80%EC%9E%90%EB%8F%99%EC%B0%A8&ate=AT-ra-58a563fba1b0c343/-/-/59e557523450e118/7&frommenu=1&uid=59a61694d017df69&ct=1&uct=1&pre=http%3A%2F%2Fwww.hyundai.com%2Fkr%2Fshowroom.do%3FcarCd1%3DRD005%26WT.ac%3Dgnb_carkind_accent&tt=0&captcha_provider=recaptcha2&pro=0 \";\r\n" + 
+				"	\r\n" + 
+				"	var popOption = \"width=400, height=400, resizable=no, scrollbars=no, status=no;\";    //팝업창 옵션(optoin)\r\n" + 
+				"\r\n" + 
+				"		window.open(popUrl,\"\",popOption);\r\n" + 
+				"}\r\n" + 
+				"	\r\n" + 
+				"function popupOpen3(){\r\n" + 
+				"\r\n" + 
+				"	var popUrl = \" https://plus.google.com/share?url=http%3A%2F%2Fwww.hyundai.com%2Fkr%2Fshowroom.do%3FcarCd1%3DRD005%26WT.ac%3Dgnb_carkind_accent%23a&t=%EC%97%91%EC%84%BC%ED%8A%B8+%EA%B3%B5%EC%8B%9D+%ED%8E%98%EC%9D%B4%EC%A7%80+%7C+%ED%98%84%EB%8C%80%EC%9E%90%EB%8F%99%EC%B0%A8 \";\r\n" + 
+				"	\r\n" + 
+				"	var popOption = \"width=400, height=400, resizable=no, scrollbars=no, status=no;\";    //팝업창 옵션(optoin)\r\n" + 
+				"\r\n" + 
+				"		window.open(popUrl,\"\",popOption);\r\n" + 
+				"\r\n" + 
+				"}\r\n" + 
+				"	\r\n" + 
+				"	\r\n" + 
+				"	$(function() {\r\n" + 
+				"		var isClick = false;\r\n" + 
+				"		$(\"#detail_1_Btn\").click(function (){ \r\n" + 
+				"			if (!isClick) {\r\n" + 
+				"				isClick = !isClick;\r\n" + 
+				"				$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/up.PNG\");\r\n" + 
+				"				$(\".kona1\").slideToggle(\"slow\"); \r\n" + 
+				"				$(\"#detail_1_img\").attr(\"src\", \"/DreamProject/img/kona/kona3.png\");\r\n" + 
+				"				$(\".snstool\").css(\"display\", \"none\");\r\n" + 
+				"			}\r\n" + 
+				"			else {\r\n" + 
+				"				isClick = !isClick;\r\n" + 
+				"				$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/down.PNG\");\r\n" + 
+				"				$(\".kona1\").slideToggle(\"slow\");\r\n" + 
+				"				$(\"#detail_1_img\").attr(\"src\", \"/DreamProject/img/kona/kona.png\");\r\n" + 
+				"				$(\".snstool\").css(\"display\", \"inline-block\");\r\n" + 
+				"			}\r\n" + 
+				"		});		\r\n" + 
+				"	});\r\n" + 
+				"	\r\n" + 
+				"	$(function() {\r\n" + 
+				"		var isClick = false;\r\n" + 
+				"		$(\"#detail_2_Btn\").click(function (){ \r\n" + 
+				"			if (!isClick) {\r\n" + 
+				"				isClick = !isClick;\r\n" + 
+				"				$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/up.PNG\");\r\n" + 
+				"				$(\".kona2\").slideToggle(\"slow\"); \r\n" + 
+				"				$(\"#detail_2_img\").attr(\"src\", \"/DreamProject/img/kona/design9.png\");\r\n" + 
+				"				$(\".snstool2\").css(\"display\", \"none\");\r\n" + 
+				"			}\r\n" + 
+				"			else {\r\n" + 
+				"				isClick = !isClick;\r\n" + 
+				"				$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/down.PNG\");\r\n" + 
+				"				$(\".kona2\").slideToggle(\"slow\");\r\n" + 
+				"				$(\"#detail_2_img\").attr(\"src\", \"/DreamProject/img/kona/design.png\");\r\n" + 
+				"				$(\".snstool2\").css(\"display\", \"inline-block\");\r\n" + 
+				"			}\r\n" + 
+				"		});		\r\n" + 
+				"	});\r\n" + 
+				"	\r\n" + 
+				"	$(function() {\r\n" + 
+				"		var isClick = false;\r\n" + 
+				"		$(\"#detail_3_Btn\").click(function (){ \r\n" + 
+				"			if (!isClick) {\r\n" + 
+				"				isClick = !isClick;\r\n" + 
+				"				$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/up.PNG\");\r\n" + 
+				"				$(\".kona3\").slideToggle(\"slow\"); \r\n" + 
+				"				$(\"#detail_3_img\").attr(\"src\", \"/DreamProject/img/kona/space10.png\");\r\n" + 
+				"				$(\".snstool3\").css(\"display\", \"none\");\r\n" + 
+				"			}\r\n" + 
+				"			else {\r\n" + 
+				"				isClick = !isClick;\r\n" + 
+				"				$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/down.PNG\");\r\n" + 
+				"				$(\".kona3\").slideToggle(\"slow\");\r\n" + 
+				"				$(\"#detail_3_img\").attr(\"src\", \"/DreamProject/img/kona/space.png\");\r\n" + 
+				"				$(\".snstool3\").css(\"display\", \"inline-block\");\r\n" + 
+				"			}\r\n" + 
+				"		});		\r\n" + 
+				"	});\r\n" + 
+				"	$(function() {\r\n" + 
+				"		var isClick = false;\r\n" + 
+				"		$(\"#detail_4_Btn\").click(function (){ \r\n" + 
+				"			if (!isClick) {\r\n" + 
+				"				isClick = !isClick;\r\n" + 
+				"				$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/up.PNG\");\r\n" + 
+				"				$(\".kona4\").slideToggle(\"slow\"); \r\n" + 
+				"				$(\"#detail_4_img\").attr(\"src\", \"/DreamProject/img/kona/safety0.png\");\r\n" + 
+				"				$(\".snstool4\").css(\"display\", \"none\");\r\n" + 
+				"			}\r\n" + 
+				"			else {\r\n" + 
+				"				isClick = !isClick;\r\n" + 
+				"				$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/down.PNG\");\r\n" + 
+				"				$(\".kona4\").slideToggle(\"slow\");\r\n" + 
+				"				$(\"#detail_4_img\").attr(\"src\", \"/DreamProject/img/kona/safety.png\");\r\n" + 
+				"				$(\".snstool4\").css(\"display\", \"inline-block\");\r\n" + 
+				"			}\r\n" + 
+				"		});		\r\n" + 
+				"	});\r\n" + 
+				"	\r\n" + 
+				"	$(function() {\r\n" + 
+				"		var isClick = false;\r\n" + 
+				"		$(\"#detail_5_Btn\").click(function (){ \r\n" + 
+				"			if (!isClick) {\r\n" + 
+				"				isClick = !isClick;\r\n" + 
+				"				$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/up.PNG\");\r\n" + 
+				"				$(\".kona5\").slideToggle(\"slow\"); \r\n" + 
+				"				$(\"#detail_5_img\").attr(\"src\", \"/DreamProject/img/kona/life0.png\");\r\n" + 
+				"				$(\".snstool5\").css(\"display\", \"none\");\r\n" + 
+				"			}\r\n" + 
+				"			else {\r\n" + 
+				"				isClick = !isClick;\r\n" + 
+				"				$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/down.PNG\");\r\n" + 
+				"				$(\".kona5\").slideToggle(\"slow\");\r\n" + 
+				"				$(\"#detail_5_img\").attr(\"src\", \"/DreamProject/img/kona/life.png\");\r\n" + 
+				"				$(\".snstool5\").css(\"display\", \"inline-block\");\r\n" + 
+				"			}\r\n" + 
+				"		});		\r\n" + 
+				"	});\r\n" + 
+				"	  $(function() {\r\n" + 
+				"			var isClick = false;\r\n" + 
+				"			$(\"#detail_6_Btn\").click(function (){ \r\n" + 
+				"				if (!isClick) {\r\n" + 
+				"					isClick = !isClick;\r\n" + 
+				"					$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/up.PNG\");\r\n" + 
+				"					$(\".accent6\").slideToggle(\"slow\"); \r\n" + 
+				"					$(\"#detail_6_img\").attr(\"src\", \"/DreamProject/img/hd/price1.png\");\r\n" + 
+				"					\r\n" + 
+				"				}\r\n" + 
+				"				else {\r\n" + 
+				"					isClick = !isClick;\r\n" + 
+				"					$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/down.PNG\");\r\n" + 
+				"					$(\".accent6\").slideToggle(\"slow\"); \r\n" + 
+				"					$(\"#detail_6_img\").attr(\"src\", \"/DreamProject/img/price.png\");\r\n" + 
+				"					\r\n" + 
+				"				}\r\n" + 
+				"			});\r\n" + 
+				"		});\r\n" + 
+				"		$(function() {\r\n" + 
+				"			var isClick = false;\r\n" + 
+				"			$(\"#detail_7_Btn\").click(function (){ \r\n" + 
+				"				if (!isClick) {\r\n" + 
+				"					isClick = !isClick;\r\n" + 
+				"					$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/up.PNG\");\r\n" + 
+				"					$(\".accent7\").slideToggle(\"slow\"); \r\n" + 
+				"					$(\"#detail_7_img\").attr(\"src\", \"/DreamProject/img/hd/제원1.png\");\r\n" + 
+				"					\r\n" + 
+				"				}\r\n" + 
+				"				else {\r\n" + 
+				"					isClick = !isClick;\r\n" + 
+				"					$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/down.PNG\");\r\n" + 
+				"					$(\".accent7\").slideToggle(\"slow\"); \r\n" + 
+				"					$(\"#detail_7_img\").attr(\"src\", \"/DreamProject/img/제원.png\");\r\n" + 
+				"					\r\n" + 
+				"				}\r\n" + 
+				"			});\r\n" + 
+				"		}); \r\n" + 
+				"		$(function() {\r\n" + 
+				"			var isClick = false;\r\n" + 
+				"			$(\"#detail_8_Btn\").click(function (){ \r\n" + 
+				"				if (!isClick) {\r\n" + 
+				"					isClick = !isClick;\r\n" + 
+				"					$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/up.PNG\");\r\n" + 
+				"					$(\".accent8\").slideToggle(\"slow\"); \r\n" + 
+				"					$(\"#detail_8_img\").attr(\"src\", \"/DreamProject/img/hd/구매가이드1.png\");\r\n" + 
+				"					\r\n" + 
+				"				}\r\n" + 
+				"				else {\r\n" + 
+				"					isClick = !isClick;\r\n" + 
+				"					$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/down.PNG\");\r\n" + 
+				"					$(\".accent8\").slideToggle(\"slow\"); \r\n" + 
+				"					$(\"#detail_8_img\").attr(\"src\", \"/DreamProject/img/구애가이드.png\");\r\n" + 
+				"					\r\n" + 
+				"				}\r\n" + 
+				"			});\r\n" + 
+				"		});\r\n" + 
+				"		\r\n" + 
+				"		$(function() {\r\n" + 
+				"			var isClick = false;\r\n" + 
+				"			$(\"#detail_9_Btn\").click(function (){ \r\n" + 
+				"				if (!isClick) {\r\n" + 
+				"					isClick = !isClick;\r\n" + 
+				"					$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/up.PNG\");\r\n" + 
+				"					$(\".kona9\").slideToggle(\"slow\"); \r\n" + 
+				"					$(\"#detail_9_img\").attr(\"src\", \"/DreamProject/img/kona/런칭cf1.png\");\r\n" + 
+				"					$(\".snstool9\").css(\"display\", \"none\");\r\n" + 
+				"				}\r\n" + 
+				"				else {\r\n" + 
+				"					isClick = !isClick;\r\n" + 
+				"					$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/down.PNG\");\r\n" + 
+				"					$(\".kona9\").slideToggle(\"slow\");\r\n" + 
+				"					$(\"#detail_9_img\").attr(\"src\", \"/DreamProject/img/kona/런칭cf.png\");\r\n" + 
+				"					$(\".snstool9\").css(\"display\", \"inline-block\");\r\n" + 
+				"				}\r\n" + 
+				"			});	\r\n" + 
+				"			\r\n" + 
+				"		});\r\n" + 
+				"		$(function() {\r\n" + 
+				"			var isClick = false;\r\n" + 
+				"			$(\"#detail_10_Btn\").click(function (){ \r\n" + 
+				"				if (!isClick) {\r\n" + 
+				"					isClick = !isClick;\r\n" + 
+				"					$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/up.PNG\");\r\n" + 
+				"					$(\".kona10\").slideToggle(\"slow\"); \r\n" + 
+				"					$(\"#detail_10_img\").attr(\"src\", \"/DreamProject/img/kona/performance1.png\");\r\n" + 
+				"					$(\".snstool10\").css(\"display\", \"none\");\r\n" + 
+				"				}\r\n" + 
+				"				else {\r\n" + 
+				"					isClick = !isClick;\r\n" + 
+				"					$(this).find(\"img\").attr(\"src\", \"/Board1/img/hd/down.PNG\");\r\n" + 
+				"					$(\".kona10\").slideToggle(\"slow\");\r\n" + 
+				"					$(\"#detail_10_img\").attr(\"src\", \"/DreamProject/img/kona/performance.png\");\r\n" + 
+				"					$(\".snstool10\").css(\"display\", \"inline-block\");\r\n" + 
+				"				}\r\n" + 
+				"			});	\r\n" + 
+				"			\r\n" + 
+				"		});\r\n" + 
+				"		\r\n" + 
+				"	   $( function() {\r\n" + 
+				"			$(\"#drive\").click(function() {\r\n" + 
+				"				$(\"#video\").find(\"iframe\").attr(\"src\", \"https://www.youtube.com/embed/iwSQdc4YQ9M\");\r\n" + 
+				"			});\r\n" + 
+				"			\r\n" + 
+				"			$(\"#safe\").click(function() {\r\n" + 
+				"				$(\"#video\").find(\"iframe\").attr(\"src\", \"https://www.youtube.com/embed/Zvk0xxNeQhE\");\r\n" + 
+				"			});\r\n" + 
+				"			\r\n" + 
+				"       });\r\n" + 
+				"	   \r\n" + 
+				"	   $(function() {\r\n" + 
+				"			var width = $(window).width();\r\n" + 
+				"			\r\n" + 
+				"			$(\".mainHeader\").css({\r\n" + 
+				"				\"width\": width + 10\r\n" + 
+				"			});\r\n" + 
+				"			$(\".mask\").css({\r\n" + 
+				"				\"width\": (width + 10) + \"px\"\r\n" + 
+				"			});\r\n" + 
+				"			$(\".main-spot-item-background\").css({\r\n" + 
+				"				\"width\": (width + 10) + \"px\"\r\n" + 
+				"			});\r\n" + 
+				"		});\r\n" + 
+				"\r\n" + 
+				"		$(window).resize(function() {\r\n" + 
+				"			var width = $(window).width();\r\n" + 
+				"			\r\n" + 
+				"			$(\".mainHeader\").css({\r\n" + 
+				"				\"width\": width + 10\r\n" + 
+				"			});\r\n" + 
+				"			$(\".mask\").css({\r\n" + 
+				"				\"width\": (width + 10) + \"px\"\r\n" + 
+				"			});\r\n" + 
+				"			$(\".main-spot-item-background\").css({\r\n" + 
+				"				\"width\": (width + 10) + \"px\"\r\n" + 
+				"			});\r\n" + 
+				"		});\r\n" + 
+				"\r\n" + 
+				"	   \r\n" + 
+				"\r\n" + 
+				"	   \r\n" + 
+				"\r\n" + 
+				"		\r\n" + 
+				"	</script>\r\n" + 
+				"<div style=\"position:absolute;top:0px;\">\r\n" + 
+				"	<div class=\"mask\" > \r\n" + 
+				"		<div class=\"mainHeader\" style=\"height: 660px; \">\r\n" + 
+				"			<div class=\"main-spot-item-background\" style=\"background-image: url('/DreamProject/img/accent/show_room/bg_visual4.jpg');\r\n" + 
+				"			background-position: 50% 0; min-width: 930px; height: 660px; \">\r\n" + 
+				"				<div class=\"main-spot-item-wrapper\" style=\"height: 660px; width: 930px; margin: 0 auto 0; position: relative;\"> \r\n" + 
+				"	\r\n" + 
+				"	\r\n" + 
+				"				  \r\n" + 
+				"						<p class=\"main-spot-item-carfont\" style=\"position: absolute; left: 23px; top: 140px;\">\r\n" + 
+				"							<img src=\"/DreamProject/img/accent/show_room/txt_visual4.png\"/>\r\n" + 
+				"							<img style=\"position: absolute;top: 100px;\" src=\"/DreamProject/img/accent/show_room/btn_botchat.png\"/>\r\n" + 
+				"						</p>\r\n" + 
+				"				</div>\r\n" + 
+				"			</div>	  \r\n" + 
+				"		</div> \r\n" + 
+				"		\r\n" + 
+				"		  \r\n" + 
+				"		\r\n" + 
+				"		<div style=\"width: 100%; min-width: 930px; position: relative; height: 101px; \r\n" + 
+				"		background-image: url('/DreamProject/img/accent/show_room/back_1.gif') ; \">\r\n" + 
+				"		\r\n" + 
+				"			<div style=\"position: relative; padding:0 25px;width:930px; margin: auto; height: 101px;\">\r\n" + 
+				"				<div class=\"carbrand\" style=\"position: relative; height: 62px;\">\r\n" + 
+				"					<div><img style=\"border: 0; vertical-align: top\" src=\"/DreamProject/img/accent/show_room/kona.png\"></div>\r\n" + 
+				"					<ul class=\"carmenu\" style=\"position: absolute; top: 0;right: 0;height: 62px;\">\r\n" + 
+				"						<li><img style=\"border: 0; vertical-align: top;\" src=\"/DreamProject/img/accent/show_room/menu_carbrand03.png\"></li>\r\n" + 
+				"					</ul>\r\n" + 
+				"				</div>\r\n" + 
+				"				<ul class=\"car_spec\" style=\"    width: 100%;\">\r\n" + 
+				"					<li style=\"float: left;\"><a style=\"display: block;\" class=\"moveBtn\" data-page=\"893\" href=\"javascript:void(0)\"><img style=\"border: 0; vertical-align: top;\" src=\"/DreamProject/img/accent/show_room/kona.gif\"/></a></li>\r\n" + 
+				"					<li style=\"float: left;\"><a style=\"display: block;\" class=\"moveBtn\" data-page=\"894\" href=\"javascript:void(0)\"><img style=\"border: 0; vertical-align: top;\" src=\"/DreamProject/img/accent/show_room/런칭cf.gif\"/></a></li>\r\n" + 
+				"					<li style=\"float: left;\"><a style=\"display: block;\" class=\"moveBtn\" data-page=\"895\" href=\"javascript:void(0)\"><img style=\"border: 0; vertical-align: top;\"  src=\"/DreamProject/img/accent/show_room/design1.gif\"/></a></li>\r\n" + 
+				"					<li style=\"float: left;\"><a style=\"display: block;\" class=\"moveBtn\" data-page=\"896\" href=\"javascript:void(0)\"><img style=\"border: 0; vertical-align: top;\"  src=\"/DreamProject/img/accent/show_room/space.gif\"/></a></li>\r\n" + 
+				"					<li style=\"float: left;\"><a style=\"display: block;\" class=\"moveBtn\" data-page=\"897\" href=\"javascript:void(0)\"><img style=\"border: 0; vertical-align: top;\"  src=\"/DreamProject/img/accent/show_room/performance.gif\"/></a></li>\r\n" + 
+				"					<li style=\"float: left;\"><a style=\"display: block;\" class=\"moveBtn\" data-page=\"898\" href=\"javascript:void(0)\"><img style=\"border: 0; vertical-align: top;\"  src=\"/DreamProject/img/accent/show_room/safety1.gif\"/></a></li>\r\n" + 
+				"					<li style=\"float: left;\"><a style=\"display: block;\" class=\"moveBtn\" data-page=\"899\" href=\"javascript:void(0)\"><img style=\"border: 0; vertical-align: top;\"  src=\"/DreamProject/img/accent/show_room/lifestyle.gif\"/></a></li>\r\n" + 
+				"					<li style=\"float: left;\"><a style=\"display: block;\" class=\"moveBtn\" data-page=\"900\" href=\"javascript:void(0)\"><img style=\"border: 0; vertical-align: top;\"  src=\"/DreamProject/img/accent/show_room/가격2.gif\"/></a></li>\r\n" + 
+				"					<li style=\"float: left;\"><a style=\"display: block;\" class=\"moveBtn\" data-page=\"901\" href=\"javascript:void(0)\"><img style=\"border: 0; vertical-align: top;\"  src=\"/DreamProject/img/accent/show_room/제원2.gif\"/></a></li>\r\n" + 
+				"					<li style=\"float: left;\"><a style=\"display: block;\" class=\"moveBtn\" data-page=\"902\" href=\"javascript:void(0)\"><img style=\"border: 0; vertical-align: top;\"  src=\"/DreamProject/img/accent/show_room/구매가이드3.gif\"/></a></li>\r\n" + 
+				"				</ul>\r\n" + 
+				"			</div>\r\n" + 
+				"			\r\n" + 
+				"		</div>\r\n" + 
+				"		\r\n" + 
+				"		\r\n" + 
+				"		\r\n" + 
+				"	</div>\r\n" + 
+				"	\r\n" + 
+				"\r\n" + 
+				"<div class=\"kona_main\">\r\n" + 
+				"		<div class=\"quick_menu\">\r\n" + 
+				"			<h4><img src=\"/DreamProject/img/quickmenu.png\" alt=\"QUICKMENU\"></h4>\r\n" + 
+				"    		<a href=\"http://www.hyundai.com/kr/tdn/index.do\"><img src=\"/DreamProject/img/시승신청.png\" alt=\"시승센터\" class=\"menu\"></a>\r\n" + 
+				"			<a href=\"https://logon.hyundai.com/kr/quotation/main.do?carcode=RD005\"><img src=/DreamProject/img/견적내기.png  alt=\"견적내기\" class=\"menu\"></a>\r\n" + 
+				"			<a href=\"http://www.hyundai.com/kr/estimation/compare.do?carCd=RD005\"><img src=/DreamProject/img/경쟁차비교.png alt=\"경쟁차비교\" class=\"menu\"></a>\r\n" + 
+				"			<a href=\"https://logon.hyundai.com/kr/ctlg/req/selectCtlgPaging.do?carSort=RD&carCd=RD005\"><img src=/DreamProject/img/카탈로그다운로드.png alt=\"카탈로그신청\" class=\"menu\"></a>\r\n" + 
+				"			<a href=\"https://logon.hyundai.com/kr/pur/purMgmtFrontView.do\"><img src=\"/DreamProject/img/구매상담.png\"  alt=\"구매상담2\" class=\"menu\"></a>\r\n" + 
+				"			<div class=\"top-button\">\r\n" + 
+				"			<a href=\"#\"><img src=/DreamProject/img/btn_top.png alt=\"top\"></a>\r\n" + 
+				"			</div>\r\n" + 
+				"		</div>\r\n" + 
+				"		\r\n" + 
+				"	<div class=\"kona_submain\" style=\"position:relative;\">\r\n" + 
+				"		<div class=\"konaDiv\" id=\"showroom-cont-893\">\r\n" + 
+				"			<h2 style=\"display: inline-block;\"><img id=\"detail_1_img\" src=\"/DreamProject/img/kona/kona.png\"/></h2>\r\n" + 
+				"			<div style=\"display: inline-block; position:absolute; right:0px;\">\r\n" + 
+				"			<span id=\"detail_1_Btn\"><img src=\"/DreamProject/img/hd/down.PNG\"/></span>\r\n" + 
+				"			<div class=\"snstool\">\r\n" + 
+				"				<a href=\"javascript:popupOpen();\" >\r\n" + 
+				"					<img src=\"/DreamProject/img/miniface.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"		    \r\n" + 
+				"		   		 <a href=\"javascript:popupOpen1();\" >\r\n" + 
+				"					<img src=\"/DreamProject/img/minitwi.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"		    \r\n" + 
+				"		    	<a href=\"javascript:popupOpen2();\" >\r\n" + 
+				"					<img src=\"/DreamProject/img/minikakao.PNG\"/>\r\n" + 
+				"		  	 	</a>\r\n" + 
+				"		    	\r\n" + 
+				"		   		 <a href=\"javascript:popupOpen3();\" >\r\n" + 
+				"					<img src=\"/DreamProject/img/minigg.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"			</div>\r\n" + 
+				"			</div>\r\n" + 
+				"\r\n" + 
+				"			<div class=\"kona1\">\r\n" + 
+				"				<div class=\"kona_detail\">\r\n" + 
+				"					<img src=\"/DreamProject/img/kona/kona1.jpg\"/>\r\n" + 
+				"					<img src=\"/DreamProject/img/kona/kona2.jpg\"/>\r\n" + 
+				"				</div>\r\n" + 
+				"			</div>\r\n" + 
+				"		</div>\r\n" + 
+				"		<!-- 런칭 CF -->\r\n" + 
+				"	<div style=\"width: 100%; border: 1px solid #d9d9d9; margin-bottom:20px;\" ></div>	\r\n" + 
+				"		<div class=\"konaDiv\" id=\"showroom-cont-894\">\r\n" + 
+				"			<h2 style=\"display: inline-block;\"><img id=\"detail_9_img\" src=\"/DreamProject/img/kona/런칭cf.png\"/></h2>\r\n" + 
+				"			<div style=\"display: inline-block; position:absolute; right:0px;\">\r\n" + 
+				"			<span id=\"detail_9_Btn\"><img src=\"/DreamProject/img/hd/down.PNG\"/></span>\r\n" + 
+				"				<div class=\"snstool9\">\r\n" + 
+				"					<a href=\"javascript:popupOpen();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/miniface.PNG\"/>\r\n" + 
+				"		    		</a>\r\n" + 
+				"		    \r\n" + 
+				"		   			 <a href=\"javascript:popupOpen1();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/minitwi.PNG\"/>\r\n" + 
+				"		  		 	 </a>\r\n" + 
+				"		    \r\n" + 
+				"		   			 <a href=\"javascript:popupOpen2();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/minikakao.PNG\"/>\r\n" + 
+				"		   			 </a>\r\n" + 
+				"		    \r\n" + 
+				"		  			  <a href=\"javascript:popupOpen3();\" >\r\n" + 
+				"							<img src=\"/DreamProject/img/minigg.PNG\"/>\r\n" + 
+				"		   			 </a>\r\n" + 
+				"				</div>\r\n" + 
+				"			</div>\r\n" + 
+				"\r\n" + 
+				"			<div class=\"kona9\">\r\n" + 
+				"				<div class=\"kona_detail1\">\r\n" + 
+				"					<div id=\"video\">\r\n" + 
+				"						<iframe id=\"drive1\" width=\"880\" height=\"480\" src=\"https://www.youtube.com/embed/iwSQdc4YQ9M\" frameborder=\"0\" allowfullscreen></iframe>\r\n" + 
+				"					</div>\r\n" + 
+				"					<button id=\"drive\"><img src=\"/DreamProject/img/kona/주행편.png\"/></button>\r\n" + 
+				"					<button id=\"safe\"><img src=\"/DreamProject/img/kona/안전편.png\"/></button>\r\n" + 
+				"				</div>\r\n" + 
+				"			</div>\r\n" + 
+				"	</div>\r\n" + 
+				"		\r\n" + 
+				"<!-- Design -->\r\n" + 
+				"	<div style=\"width: 100%; border: 1px solid #d9d9d9; margin-bottom:20px;\" ></div>		\r\n" + 
+				"	<div class=\"konaDiv\" id=\"showroom-cont-895\">\r\n" + 
+				"		<h2 style=\"display: inline-block;\"><img id=\"detail_2_img\" src=\"/DreamProject/img/kona/design.png\"/></h2>\r\n" + 
+				"			<div style=\"display: inline-block; position:absolute; right:0px;\">\r\n" + 
+				"				<span id=\"detail_2_Btn\"><img src=\"/DreamProject/img/hd/down.PNG\"/></span>\r\n" + 
+				"			<div class=\"snstool2\">\r\n" + 
+				"				<a href=\"javascript:popupOpen();\" >\r\n" + 
+				"				<img src=\"/DreamProject/img/miniface.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"		    \r\n" + 
+				"		  		<a href=\"javascript:popupOpen1();\" >\r\n" + 
+				"				<img src=\"/DreamProject/img/minitwi.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"		    \r\n" + 
+				"		   		<a href=\"javascript:popupOpen2();\" >\r\n" + 
+				"				<img src=\"/DreamProject/img/minikakao.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"		    \r\n" + 
+				"		   		<a href=\"javascript:popupOpen3();\" >\r\n" + 
+				"				<img src=\"/DreamProject/img/minigg.PNG\"/>\r\n" + 
+				"		   		</a>\r\n" + 
+				"			</div>\r\n" + 
+				"			</div>\r\n" + 
+				"\r\n" + 
+				"			<div class=\"kona2\">\r\n" + 
+				"				<div class=\"kona_detail\">\r\n" + 
+				"					<img src=\"/DreamProject/img/kona/design1.jpg\"/>\r\n" + 
+				"				</div>\r\n" + 
+				"				<div class=\"slide\">\r\n" + 
+				"					<div class=rolling_kona1 >\r\n" + 
+				"						<ul class= r_kona><!-- \r\n" + 
+				"					 	--><li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/design2.jpg\"/>\r\n" + 
+				"						</li><!-- 		\r\n" + 
+				"						--><li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/design3.jpg\"/>\r\n" + 
+				"						</li><!--  		\r\n" + 
+				"						--><li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/design4.jpg\"/>\r\n" + 
+				"						</li><!--  		\r\n" + 
+				"						--><li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/design5.jpg\"/>\r\n" + 
+				"						</li><!--  		\r\n" + 
+				"						--><li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/design6.jpg\"/>\r\n" + 
+				"						</li><!--  		\r\n" + 
+				"						--><li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/design7.png\"/>\r\n" + 
+				"						</li><!--  		\r\n" + 
+				"						--><li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/design8.jpg\"/>\r\n" + 
+				"						</li><!--  \r\n" + 
+				"						--></ul>\r\n" + 
+				"            		<button class=\"next-btn\"><img src=\"/DreamProject/img/nextbtn.png\" alt=\"다음\"></button>\r\n" + 
+				"           			 <button class=\"prev-btn\"><img src=\"/DreamProject/img/prevbtn.png\" alt=\"이전\"></button>\r\n" + 
+				"	    			</div>\r\n" + 
+				"	 			</div>\r\n" + 
+				"	    	</div>\r\n" + 
+				"	  	</div>\r\n" + 
+				"	  	\r\n" + 
+				"	  <!-- space -->	\r\n" + 
+				"	  	<div style=\"width: 100%; border: 1px solid #d9d9d9; margin-bottom:20px;\" ></div>	\r\n" + 
+				"	  <div class=\"konaDiv\" id=\"showroom-cont-896\">\r\n" + 
+				"	 	 <h2 style=\"display: inline-block;\"><img id=\"detail_3_img\" src=\"/DreamProject/img/kona/space.png\"/></h2>\r\n" + 
+				"			<div style=\"display: inline-block; position:absolute; right:0px;\">\r\n" + 
+				"				<span id=\"detail_3_Btn\"><img src=\"/DreamProject/img/hd/down.PNG\"/></span>\r\n" + 
+				"				<div class=\"snstool3\">\r\n" + 
+				"					<a href=\"javascript:popupOpen();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/miniface.PNG\"/>\r\n" + 
+				"		    		</a>\r\n" + 
+				"		    \r\n" + 
+				"		  			<a href=\"javascript:popupOpen1();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/minitwi.PNG\"/>\r\n" + 
+				"		    		</a>\r\n" + 
+				"		    \r\n" + 
+				"		   			<a href=\"javascript:popupOpen2();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/minikakao.PNG\"/>\r\n" + 
+				"		    		</a>\r\n" + 
+				"		    \r\n" + 
+				"		   			<a href=\"javascript:popupOpen3();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/minigg.PNG\"/>\r\n" + 
+				"		   			</a>\r\n" + 
+				"				</div>\r\n" + 
+				"			</div>\r\n" + 
+				"\r\n" + 
+				"			<div class=\"kona3\">\r\n" + 
+				"				<div class=\"kona_detail\">\r\n" + 
+				"					<img src=\"/DreamProject/img/kona/space1.jpg\"/>\r\n" + 
+				"					<img src=\"/DreamProject/img/kona/space2.jpg\"/>\r\n" + 
+				"				</div>\r\n" + 
+				"				<div class=\"slide\">\r\n" + 
+				"					<div class=rolling_kona1 >\r\n" + 
+				"						<ul class= r_kona>\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/space3.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/space4.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/space5.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/space6.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/space7.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/space8.jpg\"/>\r\n" + 
+				"						</li>\r\n" + 
+				"						</ul>\r\n" + 
+				"	    			</div>\r\n" + 
+				"            		<button class=\"next-btn\"><img src=\"/DreamProject/img/nextbtn.png\" alt=\"다음\"></button>   \r\n" + 
+				"           			 <button class=\"prev-btn\"><img src=\"/DreamProject/img/prevbtn.png\" alt=\"이전\"></button>\r\n" + 
+				"	    			</div>\r\n" + 
+				"	    			<div class=\"kona_detail\">\r\n" + 
+				"	    				<img src=\"/DreamProject/img/kona/space9.jpg\"/>\r\n" + 
+				"	 				</div>\r\n" + 
+				"	    	</div>\r\n" + 
+				"	    </div>	\r\n" + 
+				"	    \r\n" + 
+				"	    <!-- performance -->\r\n" + 
+				"	    <div style=\"width: 100%; border: 1px solid #d9d9d9; margin-bottom:20px;\" ></div>	\r\n" + 
+				"	  <div class=\"konaDiv\" id=\"showroom-cont-897\">\r\n" + 
+				"	 	 <h2 style=\"display: inline-block;\"><img id=\"detail_10_img\" src=\"/DreamProject/img/kona/performance.png\"/></h2>\r\n" + 
+				"			<div style=\"display: inline-block; position:absolute; right:0px;\">\r\n" + 
+				"				<span id=\"detail_10_Btn\"><img src=\"/DreamProject/img/hd/down.PNG\"/></span>\r\n" + 
+				"				<div class=\"snstool10\">\r\n" + 
+				"					<a href=\"javascript:popupOpen();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/miniface.PNG\"/>\r\n" + 
+				"		    		</a>\r\n" + 
+				"		    \r\n" + 
+				"		  			<a href=\"javascript:popupOpen1();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/minitwi.PNG\"/>\r\n" + 
+				"		    		</a>\r\n" + 
+				"		    \r\n" + 
+				"		   			<a href=\"javascript:popupOpen2();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/minikakao.PNG\"/>\r\n" + 
+				"		    		</a>\r\n" + 
+				"		    \r\n" + 
+				"		   			<a href=\"javascript:popupOpen3();\" >\r\n" + 
+				"						<img src=\"/DreamProject/img/minigg.PNG\"/>\r\n" + 
+				"		   			</a>\r\n" + 
+				"				</div>\r\n" + 
+				"			</div>\r\n" + 
+				"\r\n" + 
+				"			<div class=\"kona10\">\r\n" + 
+				"				<div class=\"kona_detail\">\r\n" + 
+				"					<img src=\"/DreamProject/img/kona/performance2.jpg\"/>\r\n" + 
+				"					<img src=\"/DreamProject/img/kona/performance3.jpg\"/>\r\n" + 
+				"				</div>\r\n" + 
+				"				\r\n" + 
+				"				</div>\r\n" + 
+				"		</div>\r\n" + 
+				"	    	<!-- Safety -->\r\n" + 
+				"	    		<div style=\"width: 100%; border: 1px solid #d9d9d9; margin-bottom:20px;\" ></div>	\r\n" + 
+				"	    	<div class=\"konaDiv\" id=\"showroom-cont-898\">\r\n" + 
+				"			<h2 style=\"display: inline-block;\"><img id=\"detail_4_img\" src=\"/DreamProject/img/kona/safety.png\"/></h2>\r\n" + 
+				"			<div style=\"display: inline-block; position:absolute; right:0px;\">\r\n" + 
+				"				<span id=\"detail_4_Btn\"><img src=\"/DreamProject/img/hd/down.PNG\"/></span>\r\n" + 
+				"			<div class=\"snstool4\">\r\n" + 
+				"				<a href=\"javascript:popupOpen();\" >\r\n" + 
+				"				<img src=\"/DreamProject/img/miniface.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"		    \r\n" + 
+				"		  		<a href=\"javascript:popupOpen1();\" >\r\n" + 
+				"				<img src=\"/DreamProject/img/minitwi.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"		    \r\n" + 
+				"		   		<a href=\"javascript:popupOpen2();\" >\r\n" + 
+				"				<img src=\"/DreamProject/img/minikakao.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"		    \r\n" + 
+				"		   		<a href=\"javascript:popupOpen3();\" >\r\n" + 
+				"				<img src=\"/DreamProject/img/minigg.PNG\"/>\r\n" + 
+				"		   		</a>\r\n" + 
+				"			</div>\r\n" + 
+				"			</div>\r\n" + 
+				"\r\n" + 
+				"			<div class=\"kona4\">\r\n" + 
+				"				<div class=\"kona_detail\">\r\n" + 
+				"					<img src=\"/DreamProject/img/kona/safety1.jpg\"/>\r\n" + 
+				"				</div>\r\n" + 
+				"				<div class=\"slide\">\r\n" + 
+				"					<div class=rolling_kona1 >\r\n" + 
+				"						<ul class= r_kona>\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/safety2.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/safety3.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/safety4.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/safety5.jpg\"/>\r\n" + 
+				"						</li>\r\n" + 
+				"						</ul>\r\n" + 
+				"	    			</div>\r\n" + 
+				"            		<button class=\"next-btn\"><img src=\"/DreamProject/img/nextbtn.png\" alt=\"다음\"></button>   \r\n" + 
+				"           			 <button class=\"prev-btn\"><img src=\"/DreamProject/img/prevbtn.png\" alt=\"이전\"></button>\r\n" + 
+				"	    			</div>\r\n" + 
+				"	    			<div class=\"kona_detail\">\r\n" + 
+				"					<img src=\"/DreamProject/img/kona/safety6.jpg\"/>\r\n" + 
+				"				</div>\r\n" + 
+				"				<div class=\"slide\">\r\n" + 
+				"					<div class=rolling_kona1 >\r\n" + 
+				"						<ul class= r_kona>\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/safety7.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/safety8.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/safety9.jpg\"/>\r\n" + 
+				"						</li>		\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/safety10.jpg\"/>\r\n" + 
+				"						</li>\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/safety11.jpg\"/>\r\n" + 
+				"						</li>\r\n" + 
+				"						<li>\r\n" + 
+				"							<img src=\"/DreamProject/img/kona/safety12.jpg\"/>\r\n" + 
+				"						</li>\r\n" + 
+				"						</ul>\r\n" + 
+				"	    			</div>\r\n" + 
+				"            		<button class=\"next-btn\"><img src=\"/DreamProject/img/nextbtn.png\" alt=\"다음\"></button>   \r\n" + 
+				"           			 <button class=\"prev-btn\"><img src=\"/DreamProject/img/prevbtn.png\" alt=\"이전\"></button>\r\n" + 
+				"	 </div>\r\n" + 
+				"	    	</div>\r\n" + 
+				"	  	</div>\r\n" + 
+				"	  	\r\n" + 
+				"	  	<!-- lifestyle -->\r\n" + 
+				"	  		<div style=\"width: 100%; border: 1px solid #d9d9d9; margin-bottom:20px;\" ></div>	\r\n" + 
+				"	  <div class=\"konaDiv\" id=\"showroom-cont-899\">\r\n" + 
+				"	  		<h2 style=\"display: inline-block;\"><img id=\"detail_5_img\" src=\"/DreamProject/img/kona/life.png\"/></h2>\r\n" + 
+				"			<div style=\"display: inline-block; position:absolute; right:0px;\">\r\n" + 
+				"			<span id=\"detail_5_Btn\"><img src=\"/DreamProject/img/hd/down.PNG\"/></span>\r\n" + 
+				"			<div class=\"snstool5\">\r\n" + 
+				"				<a href=\"javascript:popupOpen();\" >\r\n" + 
+				"					<img src=\"/DreamProject/img/miniface.PNG\"/>\r\n" + 
+				"		   		</a>\r\n" + 
+				"		    \r\n" + 
+				"		    	<a href=\"javascript:popupOpen1();\" >\r\n" + 
+				"					<img src=\"/DreamProject/img/minitwi.PNG\"/>\r\n" + 
+				"		   	 	</a>\r\n" + 
+				"		    \r\n" + 
+				"		    	<a href=\"javascript:popupOpen2();\" >\r\n" + 
+				"					<img src=\"/DreamProject/img/minikakao.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"		    \r\n" + 
+				"		   	 	<a href=\"javascript:popupOpen3();\" >\r\n" + 
+				"					<img src=\"/DreamProject/img/minigg.PNG\"/>\r\n" + 
+				"		    	</a>\r\n" + 
+				"			</div>\r\n" + 
+				"			</div>\r\n" + 
+				"\r\n" + 
+				"			<div class=\"kona5\">\r\n" + 
+				"				<div class=\"kona_detail\">\r\n" + 
+				"					<img src=\"/DreamProject/img/kona/life1.jpg\"/>\r\n" + 
+				"				</div>\r\n" + 
+				"			</div>\r\n" + 
+				"	</div>\r\n" + 
+				"		<!-- 가격 -->\r\n" + 
+				"			<div style=\"width: 100%; border: 1px solid #d9d9d9; margin-bottom:20px;\" ></div>	\r\n" + 
+				"		<div class=\"konaDiv\" id=\"showroom-cont-900\">\r\n" + 
+				"				<h2 style=\"display: inline-block;\"><img id=\"detail_6_img\" src=\"/DreamProject/img/price.png\"/></h2>\r\n" + 
+				"				<div style=\"display: inline-block; float: right;\">\r\n" + 
+				"					<span id=\"detail_6_Btn\"><img src=\"/DreamProject/img/hd/down.PNG\"/></span>\r\n" + 
+				"				</div>\r\n" + 
+				"				<div class=\"accent6\">\r\n" + 
+				"					<div class=\"list-wrapper\">\r\n" + 
+				"								<ul class=\"list-type01\">\r\n" + 
+				"									<li class=\"section\">\r\n" + 
+				"										<span class=\"section1\"></span><b>패키지 선택품목</b>\r\n" + 
+				"									</li>\r\n" + 
+				"									<li class=\"section\">\r\n" + 
+				"										<span class=\"section1\"></span><b>밸류 패키지</b>\r\n" + 
+				"										<ul class=\"list-type02\">\r\n" + 
+				"											<li>&middot; 버튼시동 & 스마트키 시스템 + 17인치 알로이 휠& 타이어\r\n" + 
+				"											</li>\r\n" + 
+				"										</ul>\r\n" + 
+				"									</li>\r\n" + 
+				"									<li class=\"section\">\r\n" + 
+				"										<span class=\"section1\"></span><b>플러스 패키지I</b>\r\n" + 
+				"										<ul class=\"list-type02\">\r\n" + 
+				"											<li>&middot; 7후측방 충돌 경고 + 18인치 알로이 휠 & 타이어 + 풀오토 에어컨 + 하이패스 시스템(ECM 미적용)\r\n" + 
+				"											</li>\r\n" + 
+				"										</ul>\r\n" + 
+				"									</li>\r\n" + 
+				"									<li class=\"section\">\r\n" + 
+				"										<span class=\"section1\"></span><b>플러스 패키지II</b>\r\n" + 
+				"										<ul class=\"list-type02\">\r\n" + 
+				"											<li> &middot;17인치 알로이 휠 & 타이어 + 운전석 전동 조절(8way) & 전동식 럼버서포트(2way) + 앞좌석 통풍 + 풀오토 에어컨 + 전방 주차 보조 시스템  \r\n" + 
+				"											</li>\r\n" + 
+				"										</ul>\r\n" + 
+				"									</li>\r\n" + 
+				"									<li class=\"section\">\r\n" + 
+				"										<span class=\"section1\"></span><b>플러스 패키지 III</b>\r\n" + 
+				"										<ul class=\"list-type02\">\r\n" + 
+				"											<li> &middot;후측방 충돌 경고 + 헤드업 디스플레이(컴바이너 타입) + 운전석 전동 조절(8way) & 전동식 럼버서포트(2way) + 앞좌석 통풍 + 풀오토 에어컨 + 전방 주차 보조 시스\r\n" + 
+				"											<br/>템 + 레인센서  \r\n" + 
+				"											</li>\r\n" + 
+				"										</ul>\r\n" + 
+				"									</li>\r\n" + 
+				"									<li class=\"section\">\r\n" + 
+				"										<span class=\"section1\"></span><b>플래티넘 패키지 I</b>\r\n" + 
+				"										<ul class=\"list-type02\">\r\n" + 
+				"											<li>&middot; 투톤 컬러 루프 + 헤드업 디스플레이(컴바이너 타입) + 4.2인치 컬러 LCD 클러스터 + 천연가죽 시트 + 동승석 전동 조절(8way) + 오토 디포그 + 클러스터 이오나이저 \r\n" + 
+				"											<br/>+ 동승석 세이프티 파워윈도우 + 레인센서 + 러기지 네트 + 경사로 저속 주행장치 + 스마트폰 무선충전 시스템\r\n" + 
+				"											</li>\r\n" + 
+				"										</ul>\r\n" + 
+				"									</li>\r\n" + 
+				"									<li class=\"section\">\r\n" + 
+				"										<span class=\"section1\"></span><b>현대 스마트 센스</b>\r\n" + 
+				"										<ul class=\"list-type02\">\r\n" + 
+				"											<li> &middot;전방 충돌방지 보조 + 차로 이탈방지 보조 + 운전자 주의 경고  \r\n" + 
+				"											</li>\r\n" + 
+				"										</ul>\r\n" + 
+				"									</li>\r\n" + 
+				"									<li class=\"section\">\r\n" + 
+				"										<span class=\"section1\"></span><b>현대 스마트 센스 플러스</b>\r\n" + 
+				"										<ul class=\"list-type02\">\r\n" + 
+				"											<li> &middot; 전방 충돌방지 보조 + 차로 이탈방지 보조 + 운전자 주의 경고 + 하이빔 보조\r\n" + 
+				"											</li>\r\n" + 
+				"										</ul>\r\n" + 
+				"									</li>\r\n" + 
+				"									<li class=\"section\">\r\n" + 
+				"										<span class=\"section1\"></span><b>인포테인먼트 패키지</b>\r\n" + 
+				"										<ul class=\"list-type02\">\r\n" + 
+				"											<li>&middot; 8인치 내비게이션 + 블루링크(텔레매틱스) + KRELL 프리미엄 사운드 시스템\r\n" + 
+				"											</li>\r\n" + 
+				"										</ul>\r\n" + 
+				"									</li>\r\n" + 
+				"								</ul>\r\n" + 
+				"							</div> 	\r\n" + 
+				"					\r\n" + 
+				"							<div class=\"list-wrapper\">\r\n" + 
+				"								<ul class=\"list-type01\">\r\n" + 
+				"									<li class=\"section\">\r\n" + 
+				"										<ul class=\"list-type02\">\r\n" + 
+				"											<li>&middot; 내장 컬러 패키지(틸블루, 오렌지) 선택 시 컬러대금 추가(10만원)</li>\r\n" + 
+				"											<li>- 내장 컬러 패키지(오렌지) 적용 부위 : 시트 메인부, 시트&스티어링 휠 스티치, 도어 센터트림, 도어 암레스트, 에어벤트, 시동 버튼 주변부, 기어 인디케이터 주변부\r\n" + 
+				"											<br/>- 내장 컬러 패키지(틸블루) 적용 부위 : 시트 메인부, 옐로우 시트 스티치&파이핑, 도어 어퍼트림, 도어 암레스트, 크래쉬 패드\r\n" + 
+				"											<li>&middot; 내장 컬러 패키지(오렌지) 선택 시, 텐저린 코멧 외장칼라 적용</li>\r\n" + 
+				"											<li>&middot; 내장 컬러 패키지(틸블루) 선택 시, 세라믹 블루 외장칼라 적용</li>\r\n" + 
+				"											<li>&middot; 내장 컬러 패키지(오렌지/틸블루)는 인조가죽 시트 사양에 적용 가능</li>\r\n" + 
+				"											<li>&middot;LED 헤드램프 적용 시 헤드램프 자동 높이 조절장치 포함</li>\r\n" + 
+				"											<li>&middot;안개등 및 현대 스마트 센스 적용시 전면 범퍼 하단부 실버 가니쉬 포함</li>\r\n" + 
+				"											<li>&middot;썬루프 및 투톤 루프 컬러 동시 적용 불가</li>\r\n" + 
+				"											<li>&middot;투톤 컬러 루프 사양은 프리미엄 트림 및 FlUX 프리미엄/프리미엄 스페셜 트림에서 적용 가능</li>\r\n" + 
+				"											<li>&middot;하이패스 시스템에는 장애인 통행료 자동할인 기능 없음</li>\r\n" + 
+				"											<li>&middot;7인치 디스플레이 오디오 및 8인치 내비게이션 선택 시 후방카메라 포함</li>\r\n" + 
+				"											<li>&middot;7인치 디스플레이 오디오 사양의 경우, 헤드업 디스플레이 사양에 내비게이션 정보 미적용</li>\r\n" + 
+				"											<li>&middot;일반 사운드 시스템(6스피커) : 프런트 도어 스피커(2개), 리어 도어 스피커(2개), 트위터 스피커(2개)</li>\r\n" + 
+				"											<li>&middot;KRELL 프리미엄 사운드 시스템(8스피커) : 센터 스피커(1개), 프런트 도어 스피커(2개), 리어 도어 스피커(2개), 트위터 스피커(2개), 서브우퍼(1개), 외장 앰프</li>\r\n" + 
+				"											<li>&middot;폰 커넥티비티 기능 적용(Apple CarPlay) *아이폰5 이상 작동 (스티어링 휠의 음성인식 버튼으로 Apple CarPlay 사용 가능)</li>\r\n" + 
+				"											<li>&middot;미러링크 : 삼성 갤럭시 S8/S8 Plus, S7/S7 Edge, S6/S6 Edge/S6 Edge Plus, S5, 노트 4/5, A5/A7, LG G5, V20 限 지원, 상세 내용은 블루멤버스 사이트 참조</li>\r\n" + 
+				"											<li>&middot;지상파 DMB는 320X240 해상도를 지원하는 사양으로, DMB 사업자가 고화질 DMB(해상도 1,280X720) 방송으로 전환 등 송출방식 변경 또는 방송정책에 따라 지상파\r\n" + 
+				"											<br/> DMB 수신이 불가할 수 있음</li>\r\n" + 
+				"											<li>&middot;주행 보조 사양(전방 충돌방지 보조 등)은 위험도가 높은 특정 주행상황에서 운전자를 보조\r\n" + 
+				"											<br/>* 상세 작동 조건은 취급 설명서 참조</li>\r\n" + 
+				"										</ul>\r\n" + 
+				"									</li>\r\n" + 
+				"								</ul>\r\n" + 
+				"							</div>	\r\n" + 
+				"						</div>\r\n" + 
+				"					</div>\r\n" + 
+				"				</div>	\r\n" + 
+				"			</div>\r\n" + 
+				"			<!-- 제원 -->\r\n" + 
+				"			<div style=\"padding-left: 150px;\">\r\n" + 
+				"				<div style=\"width: 100%; border: 1px solid #d9d9d9; margin-bottom:20px;\" ></div>	\r\n" + 
+				"			<div class=\"konaDiv\" id=\"showroom-cont-901\">\r\n" + 
+				"				<h2 style=\"display: inline-block;\">\r\n" + 
+				"					<img id=\"detail_7_img\" src=\"/DreamProject/img/제원.png\" />\r\n" + 
+				"				</h2>\r\n" + 
+				"\r\n" + 
+				"				<div style=\"display: inline-block; float: right;\">\r\n" + 
+				"\r\n" + 
+				"					<span id=\"detail_7_Btn\"><img\r\n" + 
+				"						src=\"/DreamProject/img/hd/down.PNG\" /></span>\r\n" + 
+				"				</div>\r\n" + 
+				"				<div class=\"accent7\">\r\n" + 
+				"\r\n" + 
+				"					<div class=\"accent_detail\">\r\n" + 
+				"						<img src=\"/DreamProject/img/kona/제원kona.jpg\" />\r\n" + 
+				"					</div>\r\n" + 
+				"					<div class=\"detail-wrapper\">\r\n" + 
+				"						<table class=\"detail\">\r\n" + 
+				"							<thead>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<th scope=\"col\">구분</th>\r\n" + 
+				"									<th scope=\"col\">가솔린 1.6 터보</th>\r\n" + 
+				"									<th scope=\"col\">디젤 1.6</th>\r\n" + 
+				"								</tr>\r\n" + 
+				"							</thead>\r\n" + 
+				"\r\n" + 
+				"							<tbody style=\"text-align: center;\">\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>전장 (mm)</td>\r\n" + 
+				"									<td>4,165</td>\r\n" + 
+				"									<td class=\"last\">4,165</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>전폭 (mm)</td>\r\n" + 
+				"									<td>1,800</td>\r\n" + 
+				"									<td class=\"last\">1,800</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>전고 (mm)</td>\r\n" + 
+				"									<td>1,550(1,565)</td>\r\n" + 
+				"									<td class=\"last\">1,550(1,565)</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>축간거리 (mm)</td>\r\n" + 
+				"									<td>2,600</td>\r\n" + 
+				"									<td class=\"last\">2,600</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>윤거 전 (mm)</td>\r\n" + 
+				"									<td>1,575 (16\"), 1,563 (17\"), 1,559 (18\")</td>\r\n" + 
+				"									<td class=\"last\">1,575 (16\"), 1,563 (17\"), 1,559 (18\")</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>윤거 후 (mm)</td>\r\n" + 
+				"									<td>1,584(16\"), 1,572(17\"), 1,568(18\")</td>\r\n" + 
+				"									<td class=\"last\">1,584(16\"), 1,572(17\"), 1,568(18\")</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>엔진형식</td>\r\n" + 
+				"									<td>1.6 T-GDi</td>\r\n" + 
+				"									<td class=\"last\">1.6 e-VGT</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>배기량 (cc)</td>\r\n" + 
+				"									<td>1,591</td>\r\n" + 
+				"									<td class=\"last\">1,582</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>최고출력 (PS/rpm)</td>\r\n" + 
+				"									<td>177/5,500</td>\r\n" + 
+				"									<td class=\"last\">136/4,000</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>최대토크 (kg.m/rpm)</td>\r\n" + 
+				"									<td>27.0/1,500~4,500</td>\r\n" + 
+				"									<td class=\"last\">30.6/1,750~2,500</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"								<tr class=\"odd\">\r\n" + 
+				"									<td>연료탱크용량 (ℓ)</td>\r\n" + 
+				"									<td>50</td>\r\n" + 
+				"									<td class=\"last\">50</td>\r\n" + 
+				"								</tr>\r\n" + 
+				"							</tbody>\r\n" + 
+				"						</table>\r\n" + 
+				"					</div>\r\n" + 
+				"\r\n" + 
+				"					<div>\r\n" + 
+				"						<div class=\"detail-wrapper\">\r\n" + 
+				"							<table class=\"detail\">\r\n" + 
+				"								<thead>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<th scope=\"col\" colspan=\"2\">정부공인 표준연비 및 등급</th>\r\n" + 
+				"									</tr>\r\n" + 
+				"								</thead>\r\n" + 
+				"								<tbody style=\"text-align: center;\">\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>디젤 1.6 ISG_7 DCT(16″ 타이어)</td>\r\n" + 
+				"										<td class=\"left last\">정부 신고 연비 - 복합 16.8km/ℓ(도심 : 15.8km/ℓ, 고속도로 : 18.2km/ℓ)\r\n" + 
+				"										<br> CO2 배출량 : 111g/km I 배기량 : 1,582cc I 공차중량 : 1,355 I 7 DCT(1등급)</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>디젤 1.6 ISG_7 DCT(17″ 타이어)</td>\r\n" + 
+				"										<td class=\"left last\">정부 신고 연비 - 복합 16.5km/ℓ(도심 : 15.4km/ℓ, 고속도로 : 17.9km/ℓ)<br> CO2 배출량 : 113g/km I 배기량 : 1,582cc I 공차중량 : 1,370 I 7 DCT(1등급)</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										 <td>디젤 1.6 ISG_7 DCT(18″ 타이어)</td>\r\n" + 
+				"										<td class=\"left last\">정부 신고 연비 - 복합 16.2km/ℓ(도심 : 15.3km/ℓ, 고속도로 : 17.4km/ℓ)<br> CO2 배출량 : 115g/km I 배기량 : 1,582cc I 공차중량 : 1,395 I 7 DCT(1등급)</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>가솔린 1.6 터보 2WD_7 DCT(16″ 타이어)</td>\r\n" + 
+				"										<td class=\"left last\">복합 12.8km/ℓ(도심:11.4km/ℓ, 고속도로:14.9km/ℓ)<br> CO2 배출량:128g/km | 배기량:1,591cc | 공차중량:1,320kg | 7 DCT(3등급)</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>가솔린 1.6 터보 2WD_7 DCT(17″ 타이어)</td>\r\n" + 
+				"										<td class=\"left last\">복합 12.6km/ℓ(도심:11.3km/ℓ, 고속도로:14.5km/ℓ)<br> CO2 배출량:131g/km | 배기량:1,591cc | 공차중량:1,330kg | 7 DCT(3등급)</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>가솔린 1.6 터보 2WD_7 DCT(18″ 타이어)</td>\r\n" + 
+				"										<td class=\"left last\">복합 12.3km/ℓ(도심:11.0km/ℓ, 고속도로:14.2km/ℓ)<br> CO2 배출량:134g/km | 배기량:1,591cc | 공차중량:1,370kg | 7 DCT(3등급)</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>가솔린 1.6 터보 4WD_7 DCT(16″ 타이어)</td>\r\n" + 
+				"										<td class=\"left last\">정부 신고 연비 - 복합 11.3km/ℓ(도심 : 10.1km/ℓ, 고속도로 : 13.0km/ℓ)<br> CO2 배출량 : 147g/km I 배기량 : 1,591cc I 공차중량 : 1,400 I 7 DCT(4등급)</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>가솔린 1.6 터보 4WD_7 DCT(17″ 타이어)</td>\r\n" + 
+				"										<td class=\"left last\">정부 신고 연비 - 복합 11.1km/ℓ(도심 : 10.1km/ℓ, 고속도로 : 12.6km/ℓ)<br> CO2 배출량 : 150g/km I 배기량 : 1,591cc I 공차중량 : 1,425 I 7 DCT(4등급)</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>가솔린 1.6 터보 4WD_7 DCT(18″ 타이어)</td>\r\n" + 
+				"										<td class=\"left last\">정부 신고 연비 - 복합 11.0km/ℓ(도심 : 10.0km/ℓ, 고속도로 : 12.4km/ℓ)<br> CO2 배출량 : 151g/km I 배기량 : 1,591cc I 공차중량 : 1,460 I 7 DCT(4등급)</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"								</tbody>\r\n" + 
+				"							</table>\r\n" + 
+				"						</div>\r\n" + 
+				"						<div class=\"detail-wrapper\">\r\n" + 
+				"							<table class=\"detail\">\r\n" + 
+				"								<thead>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<th scope=\"col\" colspan=\"5\">타이어 효율 등급</th>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<th scope=\"col\">타이어 제조사</th>\r\n" + 
+				"										<th scope=\"col\">타이어 모델명</th>\r\n" + 
+				"										<th scope=\"col\">타이어 규격</th>\r\n" + 
+				"										<th scope=\"col\">회전저항(계수) 등급(RRC)</th>\r\n" + 
+				"										<th scope=\"col\">젖은 노면 제동력 지수 등급(G)</th>\r\n" + 
+				"									</tr>\r\n" + 
+				"								</thead>\r\n" + 
+				"								<tbody>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>NEXEN</td>\r\n" + 
+				"										<td>N’Priz</td>\r\n" + 
+				"										<td>205/60R16 92H</td>\r\n" + 
+				"										<td>2</td>\r\n" + 
+				"										<td class=\"last\">3</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>NEXEN</td>\r\n" + 
+				"										<td>N’Priz</td>\r\n" + 
+				"										<td>215/55R17 94V</td>\r\n" + 
+				"										<td>3</td>\r\n" + 
+				"										<td class=\"last\">3</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>HANKOOK</td>\r\n" + 
+				"										<td>KINERGY GT</td>\r\n" + 
+				"										<td>205/60R16 92H</td>\r\n" + 
+				"										<td>2</td>\r\n" + 
+				"										<td class=\"last\">4</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>HANKOOK</td>\r\n" + 
+				"										<td>KINERGY GT</td>\r\n" + 
+				"										<td>215/55R17 94V</td>\r\n" + 
+				"										<td>3</td>\r\n" + 
+				"										<td class=\"last\">2</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>HANKOOK</td>\r\n" + 
+				"										<td>Ventus S1 Noble2	</td>\r\n" + 
+				"										<td>235/45R18 94V</td>\r\n" + 
+				"										<td>3</td>\r\n" + 
+				"										<td class=\"last\">2</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									<tr class=\"odd\">\r\n" + 
+				"										<td>GOODYEAR</td>\r\n" + 
+				"										<td>Eagle Touring	</td>\r\n" + 
+				"										<td>235/45R18 98V</td>\r\n" + 
+				"										<td>3</td>\r\n" + 
+				"										<td class=\"last\">3</td>\r\n" + 
+				"									</tr>\r\n" + 
+				"									\r\n" + 
+				"								</tbody>\r\n" + 
+				"\r\n" + 
+				"							</table>\r\n" + 
+				"						</div>\r\n" + 
+				"						<div class=\"information\">\r\n" + 
+				"							<ul class=\"list-type01\">\r\n" + 
+				"								<li><span class=\"section1\"></span> 연비는 표준모드에 의한 연비로서 도로상태, 운전방법, 차량적재,\r\n" + 
+				"								 정비상태 및 외기온도에 따라 실주행연비와 차이가 있습니다.</li>\r\n" + 
+				"								<li><span class=\"section1\"></span> 상기 엔진성능은 NET수치임. “NET수치”란 국토교통부에서 97년부터 적용을 요구한 법규사항이며 배기가스의 저항을 감안한 신측정법으로 기존의 GROSS 출력수치와 대비 할 때 약간의 수치저하가 발생할 수 있습니다.</li>\r\n" + 
+				"								<li><span class=\"section1\"></span> 가죽시트에는 부분적으로 인조가죽이 포함되어 있습니다.</li>\r\n" + 
+				"								<li><span class=\"section1\"></span> 현대자동차는 지점/대리점의 카마스터를 통해서만 판매하며, 전국 어느 곳에서나 같은 제품 같은 가격으로 바른 거래를 실천하고 있습니다.</li>\r\n" + 
+				"								<li><span class=\"section1\"></span> 당사에서 지정하는 순정품(엔진오일, 변속기오일 등)을 사용하지 않거나 불량 연료를 사용했을 경우에는 차량에 치명적인 손상을 줄 수 있습니다.</li>\r\n" + 
+				"						\r\n" + 
+				"								<li style=\"color: #3576BC;\"><span class=\"section1\"></span>\r\n" + 
+				"									본 쇼룸 이미지 및 내용은 고객의 이해를 돕기 위해 연출된 것으로 실제와 다를 수 있으며, 차량 성능 개선을 위해 예고 없이 변경될 수 있습니다.</li>\r\n" + 
+				"								<li><span class=\"section1\"></span>주행거리는 운전자의 습관과 도로 상태, 외부 온도 및 공조 시스템 설정에 따라 변동될 수 있습니다.</li>\r\n" + 
+				"							</ul>\r\n" + 
+				"						</div>\r\n" + 
+				"					</div>\r\n" + 
+				"				</div>\r\n" + 
+				"			</div>\r\n" + 
+				"		\r\n" + 
+				"		<!--구매가이드 -->\r\n" + 
+				"		<div>\r\n" + 
+				"	<div style=\"width: 100%; border: 1px solid #d9d9d9; margin-bottom:20px;\"></div>	\r\n" + 
+				"			<div class=\"last_accent\" id=\"showroom-cont-902\">\r\n" + 
+				"	    			<h2 style=\"display: inline-block;\"><img id=\"detail_8_img\" src=\"/DreamProject/img/구매가이드.png\"/></h2>\r\n" + 
+				"	    			<div style=\"display: inline-block; float: right;\">\r\n" + 
+				"	    			<span id=\"detail_8_Btn\"><img src=\"/DreamProject/img/hd/down.PNG\"/></span>\r\n" + 
+				"	    			</div>\r\n" + 
+				"				<div class=\"accent8\">\r\n" + 
+				"	    			<div class=\"purchase-guide\">\r\n" + 
+				"           				 <div class=\"odd\">\r\n" + 
+				"                			<h4><img style=\" float: left; padding-right: 50px;\" src=\"/DreamProject/img/견적.gif\" alt=\"견적\"></h4>\r\n" + 
+				"                			<h5 class=\"link-title\"><a style=\"float:left; padding-right: 10px;\" href=\"#\">견적내기<img src=\"/DreamProject/img/btn_go.png\"/></a></h5>\r\n" + 
+				"               			 	<h5 class=\"link-title\"><a style=\"float:left;\" href=\"#\">경쟁차 비교<img src=\"/DreamProject/img/btn_go.png\"/></a></h5>\r\n" + 
+				"                			<h5 class=\"link-title\"><a style=\"float:left;\" href=\"#\">이달의 구매혜택<img src=\"/DreamProject/img/btn_go.png\"/></a></h5>\r\n" + 
+				"                        	<div class=\"icon1\"><img src=\"/DreamProject/img/견적이미지.gif\">\r\n" + 
+				"                		</div>\r\n" + 
+				"           			 	</div>\r\n" + 
+				"           			 	<div class=\"odd\">\r\n" + 
+				"                			<h4><img style=\" float: left; padding-right: 50px;\" src=\"/DreamProject/img/신청.gif\" alt=\"신청\"></h4>\r\n" + 
+				"                			<h5 class=\"link-title\"><a style=\"float:left;\" href=\"#\">카탈로그 신청  <img src=\"/DreamProject/img/btn_go.png\"/></a></h5>\r\n" + 
+				"                		<div class=\"icon\"><img src=\"/DreamProject/img/신청이미지.gif\">\r\n" + 
+				"                		</div>\r\n" + 
+				"           			 	</div>\r\n" + 
+				"           			 	<div class=\"odd\">\r\n" + 
+				"                			<h4><img style=\" float: left; padding-right: 50px;\" src=\"/DreamProject/img/상담.gif\" alt=\"상담\"></h4>\r\n" + 
+				"                			<h5 class=\"link-title\"><a style=\"float:left;\" href=\"#\">구매상담신청<img src=\"/DreamProject/img/btn_go.png\"/></a></h5>\r\n" + 
+				"               			 	<h5 class=\"link-title\"><a style=\"float:left;\" href=\"#\">전시차 조회<img src=\"/DreamProject/img/btn_go.png\"/></a></h5>\r\n" + 
+				"                			<h5 class=\"link-title\"><a style=\"float:left;\" href=\"#\">지점/대리점 조회<img src=\"/DreamProject/img/btn_go.png\"/></a></h5>\r\n" + 
+				"                		<div class=\"icon1\"><img src=\"/DreamProject/img/상담이미지.gif\">\r\n" + 
+				"                		</div>\r\n" + 
+				"           			 	</div>\r\n" + 
+				"           			 	<div class=\"odd\">\r\n" + 
+				"                			<h4><img style=\" float: left; padding-right: 50px;\" src=\"/DreamProject/img/시승.gif\" alt=\"시승\"></h4>\r\n" + 
+				"                			<h5 class=\"link-title\"><a style=\"float:left;\" href=\"#\">시승서비스<img src=\"/DreamProject/img/btn_go.png\"/></a></h5>\r\n" + 
+				"                		<div class=\"icon\"><img src=\"/DreamProject/img/시승이미지.gif\">\r\n" + 
+				"                		</div>\r\n" + 
+				"           			 	</div>\r\n" + 
+				"           			 	</div>\r\n" + 
+				"           			 </div>\r\n" + 
+				"      			</div>	 \r\n" + 
+				"      		</div>	\r\n" + 
+				"	  </div>\r\n" + 
+				"      \r\n" + 
+				"\r\n" + 
+				"\r\n" + 
+				"<link rel=\"stylesheet\" href=\"/DreamProject/css/footer.css\" />\r\n" + 
+				"<link rel=\"stylesheet\" href=\"/DreamProject/css/JunYoung/common2.css\" />\r\n" + 
+				"<div id=\"footer-navigation\">\r\n" + 
+				"	<div class=\"footer-navigation-inner\">\r\n" + 
+				"		<div class=\"foot-nav\">\r\n" + 
+				"			<div class=\"navi-left\">\r\n" + 
+				"				<ul>\r\n" + 
+				"	  				<li>\r\n" + 
+				"	  				<div class=\"navi-title\">\r\n" + 
+				"	  						<img src=\"/DreamProject/img/footer/footer_navi01.gif\"/>\r\n" + 
+				"	  				</div>\r\n" + 
+				"			  				<div class=\"carSelect\">\r\n" + 
+				"								<div class=\"select-layer-wrap\">\r\n" + 
+				"									<select>\r\n" + 
+				"										<option value=\"#\">엑센트</a></option>\r\n" + 
+				"	                                    <option value=\"#\">아반떼</a></option>\r\n" + 
+				"	                                    <option value=\"#\">i30</a></option>\r\n" + 
+				"	                                    <option value=\"#\">벨로스터</a></option>\r\n" + 
+				"	                                    <option value=\"#\">아이오닉 hybrid</a></option>\r\n" + 
+				"	                                    <option value=\"#\">아이오닉 electric</a></option>\r\n" + 
+				"	                                    <option value=\"#\">아이오닉 plug-in</a></option>\r\n" + 
+				"	                                    <option value=\"#\">쏘나타</a></option>\r\n" + 
+				"	                                    <option value=\"#\">쏘나타 hybrid</a></option>\r\n" + 
+				"	                                    <option value=\"#\">쏘나타 plug-in</a></option>\r\n" + 
+				"	                                    <option value=\"#\">i40</a></option>\r\n" + 
+				"	                                    <option value=\"#\">그랜저</a></option>\r\n" + 
+				"	                                    <option value=\"#\">그랜저 hybrid</a></option>\r\n" + 
+				"	                                    <option value=\"#\">아슬란</a></option>\r\n" + 
+				"	                                    <option value=\"#\">코나</a></option>\r\n" + 
+				"	                                    <option value=\"#\">투싼</a></option>\r\n" + 
+				"	                                    <option value=\"#\">투싼ix FUEL CELL</a></option>\r\n" + 
+				"	                                    <option value=\"#\">싼타페</a></option>\r\n" + 
+				"	                                    <option value=\"#\">맥스크루즈</a></option>\r\n" + 
+				"	                                    <option value=\"#\">쏘나타 택시</a></option>\r\n" + 
+				"	                                    <option value=\"#\">그랜저 택시</a></option>\r\n" + 
+				"	                                    <option value=\"#\">그랜드 스타렉스</a></option>\r\n" + 
+				"	                                    <option value=\"#\">쏠라티</a></option>\r\n" + 
+				"	                                    <option value=\"#\">포터Ⅱ</a></option>\r\n" + 
+				"	                                    <option value=\"#\">마이티</a></option>\r\n" + 
+				"	                                    <option value=\"#\">메가트럭</a></option>\r\n" + 
+				"	                                    <option value=\"#\">엑시언트</a></option>\r\n" + 
+				"	                                    <option value=\"#\">카운티</a></option>\r\n" + 
+				"	                                    <option value=\"#\">에어로타운</a></option>\r\n" + 
+				"	                                    <option value=\"#\">그린시티</a></option>\r\n" + 
+				"	                                    <option value=\"#\">슈퍼에어로씨티</a></option>\r\n" + 
+				"	                                    <option value=\"#\">유니시티</a></option>\r\n" + 
+				"	                                    <option value=\"#\">유니버스</a></option>\r\n" + 
+				"									</select>\r\n" + 
+				"								</div>\r\n" + 
+				"							</div>\r\n" + 
+				"	  				</li>\r\n" + 
+				"	  				<li>\r\n" + 
+				"	  				<div class=\"navi-title\">\r\n" + 
+				"	  					<img src=\"/DreamProject/img/footer/footer_navi02.gif\"/>\r\n" + 
+				"	  				</div>\r\n" + 
+				"	  					<a href=\"/DreamProject/hd/estimate\"><img src=\"/DreamProject/img/footer/footer_navi02_01.gif\"/></a>\r\n" + 
+				"	  					<a href=\"/DreamProject/hd/car\"><img src=\"/DreamProject/img/footer/footer_navi02_02.gif\"/></a>\r\n" + 
+				"	  					<a href=\"/DreamProject/hd/view\"><img src=\"/DreamProject/img/footer/footer_navi02_03.gif\"/></a>\r\n" + 
+				"	  					<a href=\"/DreamProject/hd/buy\"><img src=\"/DreamProject/img/footer/footer_navi02_04.gif\"/></a>\r\n" + 
+				"	  				</li>\r\n" + 
+				"	  				<li>\r\n" + 
+				"	  				<div class=\"navi-title\">\r\n" + 
+				"	  					<img src=\"/DreamProject/img/footer/footer_navi03.gif\"/>\r\n" + 
+				"	  				</div>\r\n" + 
+				"	  					<a href=\"/DreamProject/hd/catalog\"><img src=\"/DreamProject/img/footer/footer_navi03_01.gif\"/></a>\r\n" + 
+				"	  					<a href=\"/DreamProject/hd/counsell\"><img src=\"/DreamProject/img/footer/footer_navi03_02.gif\"/></a>\r\n" + 
+				"	  					<a href=\"/DreamProject/hd/ride\"><img src=\"/DreamProject/img/footer/footer_navi03_03.gif\"/></a>\r\n" + 
+				"	  					<a href=\"/DreamProject/hd/check\"><img src=\"/DreamProject/img/footer/footer_menu03_04.gif\"/></a>\r\n" + 
+				"	  				</li>\r\n" + 
+				"				</ul>\r\n" + 
+				"			</div>\r\n" + 
+				"			<div class=\"navi-right\">\r\n" + 
+				"				<ul>\r\n" + 
+				"	  				<li>\r\n" + 
+				"	  				<div class=\"navi-title\">\r\n" + 
+				"	  					<img src=\"/DreamProject/img/footer/footer_navi04.gif\" class=\"evt\"/>\r\n" + 
+				"	  				</div>\r\n" + 
+				"	  					<a href=\"/DreamProject/hd/event\"><img src=\"/DreamProject/img/footer/footer_navi04_01.gif\"/></a>\r\n" + 
+				"	  					<a href=\"/DreamProject/hd/pastevent\"><img src=\"/DreamProject/img/footer/footer_navi04_02.gif\"/></a>\r\n" + 
+				"	  				</li>\r\n" + 
+				"	  				<li>\r\n" + 
+				"	  				<div class=\"navi-title\">\r\n" + 
+				"	  					<img src=\"/DreamProject/img/footer/footer_navi05.gif\" class=\"inf\"/>\r\n" + 
+				"	  				</div>\r\n" + 
+				"	  					<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_navi06.gif\"/></a>\r\n" + 
+				"	  				</li>\r\n" + 
+				"	  				<li>\r\n" + 
+				"	  				<div class=\"navi-title\">\r\n" + 
+				"	  					<img src=\"/DreamProject/img/footer/footer_navi07.gif\" class=\"bms\"/>\r\n" + 
+				"	  				</div>\r\n" + 
+				"	  					<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_navi07_01.gif\"/></a>\r\n" + 
+				"	  					<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_navi07_02.gif\"/></a>\r\n" + 
+				"	  					<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_navi07_03.gif\"/></a>\r\n" + 
+				"	  					<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_navi07_04.gif\"/></a>\r\n" + 
+				"	  					<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_navi07_05.gif\"/></a>\r\n" + 
+				"	  				</li>\r\n" + 
+				"				</ul>\r\n" + 
+				"			</div>\r\n" + 
+				"		</div>\r\n" + 
+				"	</div>\r\n" + 
+				"</div>\r\n" + 
+				"<div id=\"footer-menu\">\r\n" + 
+				"	<div class=\"footer-menu-inner\">\r\n" + 
+				"		<div class=\"menu-list\">\r\n" + 
+				"			<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_menu01.gif\" /></a> \r\n" + 
+				"			<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_menu02.gif\" /></a> \r\n" + 
+				"			<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_menu03.gif\" /></a> \r\n" + 
+				"			<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_menu12.gif\" /></a> \r\n" + 
+				"			<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_menu13.gif\" /></a> \r\n" + 
+				"			<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_menu06.gif\" /></a>\r\n" + 
+				"		</div>\r\n" + 
+				"		<div class=\"menu-list ma\">\r\n" + 
+				"			<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_menu04.gif\" /></a> \r\n" + 
+				"			<a href=\"#\"><img src=\"/DreamProject/img/footer/footer_menu05.gif\" /></a> \r\n" + 
+				"			<img src=\"/DreamProject/img/footer/footer_menu07.gif\" /> \r\n" + 
+				"			<span class=\"copyright\"> <img src=\"/DreamProject/img/footer/copyright_2016.gif\" /></span>\r\n" + 
+				"		</div>\r\n" + 
+				"		<div class=\"familySite\">\r\n" + 
+				"			<div class=\"select-layer-wrap\">\r\n" + 
+				"				<select>\r\n" + 
+				"					<option>FamilySite</option>\r\n" + 
+				"					<option>현대 모터스튜디오</option>\r\n" + 
+				"					<option>블루멤버스</option>\r\n" + 
+				"					<option>현대자동차 그룹</option>\r\n" + 
+				"					<option>현대자동차 브랜드사이트</option>\r\n" + 
+				"					<option>제네시스 공식 웹사이트</option>\r\n" + 
+				"					<option>키즈현대</option>\r\n" + 
+				"					<option>현대자동차 CSR</option>\r\n" + 
+				"					<option>블루링크</option>\r\n" + 
+				"					<option>동반성장 사이트</option>\r\n" + 
+				"					<option>글로벌경영연구소</option>\r\n" + 
+				"					<option>전북 현대모터스 축구단</option>\r\n" + 
+				"				</select>\r\n" + 
+				"			</div>\r\n" + 
+				"		</div>\r\n" + 
+				"\r\n" + 
+				"		<div class=\"gooddesign\">\r\n" + 
+				"			<ul>\r\n" + 
+				"				<li><img src=\"/DreamProject/img/footer/footer_gooddesign_2015.png\" /></li>\r\n" + 
+				"				<li><img src=\"/DreamProject/img/footer/footer_wa.png\" /></li>\r\n" + 
+				"				<li><img src=\"/DreamProject/img/footer/footer_bestfamily.png\" /></li>\r\n" + 
+				"				<li><img src=\"/DreamProject/img/footer/footer_ksqei.png\" /></li>\r\n" + 
+				"				<li><img src=\"/DreamProject/img/footer/footer_kcsi.png\" /></li>\r\n" + 
+				"			</ul>\r\n" + 
+				"		</div>\r\n" + 
+				"		<div class=\"gooddesign submark\">\r\n" + 
+				"			<ul>\r\n" + 
+				"				<li><img src=\"/DreamProject/img/footer/footer_ksqi.png\" /></li>\r\n" + 
+				"				<li><img src=\"/DreamProject/img/footer/footer_ncsi.png\" /></li>\r\n" + 
+				"				<li><img src=\"/DreamProject/img/footer/footer_ks-sqi.png\" /></li>\r\n" + 
+				"			</ul>\r\n" + 
+				"		</div>\r\n" + 
+				"	</div>\r\n" + 
+				"</div>");
+		carService.insertNewCar(carVO);
+	}
+}

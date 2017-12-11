@@ -1,0 +1,61 @@
+package com.ktds.member.web;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.ktds.member.service.MemberService;
+import com.ktds.member.vo.MemberVO;
+
+@Controller
+public class MemberController {
+	
+	private MemberService memberService;
+	
+	public void setMemberService(MemberService memberService) {
+		this.memberService =  memberService;
+	}
+	
+	@RequestMapping("/member/signUp")
+	public String viewSignUpPage() {
+		
+		return "member/signUp";
+	}
+	
+	@RequestMapping("/member/doSignUp")
+	public String doSignUp(MemberVO memberVO) {
+		memberService.createMember(memberVO);
+		
+		return "redirect:/";
+	}
+	
+	@RequestMapping("/member/login")
+	public String viewLoginPage() {
+		return "member/login";
+	}
+	
+	@RequestMapping("/member/doLogin")
+	public String doLogin(MemberVO memberVO, HttpSession session) {
+		
+		MemberVO loginMemberVO = memberService.readOneMemberByIdAndPassword(memberVO);
+		
+		if( loginMemberVO != null) {
+			session.setAttribute("_USER_", loginMemberVO);
+		}
+		
+		return "redirect:/board/list";
+	}
+	
+	@RequestMapping("/member/logout")
+	public String doLogout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/member/signUp";
+	}	
+	
+	@RequestMapping("/t")
+	public String t() {
+		return "QNA/faqMain";
+	}
+
+}

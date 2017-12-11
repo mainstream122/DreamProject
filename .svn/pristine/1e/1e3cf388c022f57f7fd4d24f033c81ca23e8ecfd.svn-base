@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="FaqDao">
+  	<select id="selectAllFaqCount" resultType="_int">
+  		SELECT
+			COUNT(1)
+		FROM FAQ
+		WHERE 1=1
+		<if test="questionContent != null and questionContent != ''" >
+			AND QUESTION_CONTENT LIKE '%' || #{questionContent} || '%'
+		</if>
+		<if test="faqCategoryName != null and faqCategoryName != ''">
+			AND FAQ_CATEGORY_NAME = #{faqCategoryName}
+		</if>
+  	</select>
+  	<select id="selectAllFaq" resultType="FaqVO">
+  		<include refid="Paging.header" />
+  		SELECT
+  			FAQ_ID faqId
+			, QUESTION_CONTENT questionContent
+			, ANSWER_CONTENT answerContent
+			, FAQ_CATEGORY_NAME faqCategoryName
+		FROM FAQ
+		WHERE 1=1
+		<if test="questionContent != null and questionContent != ''" >
+			AND QUESTION_CONTENT LIKE '%' || #{questionContent} || '%'
+		</if>
+		<if test="faqCategoryName != null and faqCategoryName != ''">
+			AND FAQ_CATEGORY_NAME = #{faqCategoryName}
+		</if>
+		ORDER BY FAQ_ID DESC
+		<include refid="Paging.footer" />
+  	</select>
+  </mapper>

@@ -1,0 +1,121 @@
+package com.ktds.question.vo;
+
+import java.sql.Timestamp;
+
+import com.ktds.category.vo.CategoryVO;
+import com.ktds.member.vo.MemberVO;
+
+public class QuestionVO {
+	private int questionId;
+	private String memberId;
+	private String subject;
+	private String content;
+	private Timestamp writeDate;
+	private int categoryId;
+	private int attachmentId;
+	private String carNumber;
+	private String vinNumber;
+	private String contractNumber;
+	
+	private MemberVO memberVO;
+	
+	private CategoryVO categoryVO;
+	
+
+	public int getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(int questionId) {
+		this.questionId = questionId;
+	}
+
+	public String getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public Timestamp getWriteDate() {
+		return writeDate;
+	}
+
+	public void setWriteDate(Timestamp writeDate) {
+		this.writeDate = writeDate;
+	}
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public int getAttachmentId() {
+		return attachmentId;
+	}
+
+	public void setAttachmentId(int attachmentId) {
+		this.attachmentId = attachmentId;
+	}
+
+	public String getCarNumber() {
+		return carNumber;
+	}
+
+	public void setCarNumber(String carNumber) {
+		this.carNumber = carNumber;
+	}
+
+	public String getVinNumber() {
+		return vinNumber;
+	}
+
+	public void setVinNumber(String vinNumber) {
+		this.vinNumber = vinNumber;
+	}
+
+	public MemberVO getMemberVO() {
+		return memberVO;
+	}
+
+	public void setMemberVO(MemberVO memberVO) {
+		this.memberVO = memberVO;
+	}
+
+	public CategoryVO getCategoryVO() {
+		return categoryVO;
+	}
+
+	public void setCategoryVO(CategoryVO categoryVO) {
+		this.categoryVO = categoryVO;
+	}
+
+	public String getContractNumber() {
+		return contractNumber;
+	}
+
+	public void setContractNumber(String contractNumber) {
+		this.contractNumber = contractNumber;
+	}
+
+}

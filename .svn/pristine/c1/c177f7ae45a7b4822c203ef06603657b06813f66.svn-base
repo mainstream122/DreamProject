@@ -1,0 +1,8 @@
+package com.ktds.car.dao;
+
+import com.ktds.car.vo.CarVO;
+
+public interface CarDao {
+	
+	public CarVO selectCarById(int carId);
+}

@@ -1,0 +1,248 @@
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<jsp:include page="/WEB-INF/view/common/header.jsp" />
+<title>Q&A | 현대자동차</title>
+<link rel="stylesheet" href="<c:url value="/css/jinjoo/signup.css" />" />
+<link rel="stylesheet" href="<c:url value="/css/jinjoo/signup2.css" />" />
+<link rel="stylesheet" href="<c:url value="/css/article.css"/>" />
+<link rel="stylesheet" href="<c:url value="/css/FaqList.css"/>" />
+<script type="text/javascript"
+	src="<c:url value="/js/jquery-3.2.1.min.js"/>"></script>
+<script type="text/javascript">
+	$().ready(function() {
+		/*$("#registBtn").click(function() {
+			$("#signUpForm").attr({
+				method : "post",
+				action : "<c:url value='/member/doSignUp'/>"
+			}).submit();
+		});*/
+
+		$(".answer").hide();
+		
+		$(".subject").click(function() {
+			if($(this).parent().next(".answer").is(":not(:visible)")) {
+				$(".subject").css({
+					"background": "url('/DreamProject/img/FaqList/bg_subject_close.gif') no-repeat 703px 8px"
+				});
+				
+				$(this).css({
+				"background": "url('/DreamProject/img/FaqList/bg_subject_open.gif') no-repeat 703px 8px"});
+				$(".answer").hide();
+				$(this).parent().next(".answer").slideDown( "slow", function() {});
+			}
+		});
+		
+		$("#inputQuestionContent").val($("input[name='questionContent']").val());
+		$("#selectQuestionContent option").each(function(idx, obj){
+			if ($(obj).val()==$("input[name='faqCategoryName']").val()) {
+				$(obj).attr("selected", "selected");
+			}
+		});
+	});
+	
+	function searchFaq() {
+		$("input[name='questionContent']").val($("#inputQuestionContent").val());
+		$("input[name='faqCategoryName']").val($("#selectQuestionContent").val());
+		$("input[name='faqId']").val("0");
+		$("#faqForm").submit();
+	}
+	
+	function searchFaqById(faqId){
+		$("input[name='questionContent']").val('');
+		$("input[name='faqCategoryName']").val('');
+		$("input[name='faqId']").val(faqId);
+		$("#faqForm").submit();
+	}
+</script>
+<style type="text/css">
+body {
+	user-drag: none;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+.paging {
+	text-align:center;
+	width:930px;
+	margin: 20px auto;
+}
+.paging a {
+	display:inline-block;
+	width:23px;
+	height:23px;
+	border: 1px solid #aaaaaa;
+	color:#888888;
+	text-decoration: none;
+}
+.paging a b {
+	color:#0000FF;
+}
+.listcutter ul {
+	padding:0px;
+	margin:0px;
+	list-style: none;	
+}
+.listcutter li:first-child {
+	background: url(/DreamProject/img/global_menu/bg_listsection.gif) no-repeat 100% 26px;
+}
+.listcutter li {
+	float:left;
+}
+#subnavigation-wrap {
+    height: 130px;
+    vertical-align: top;
+    background-color:#f1f3f6;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+}
+.subnavigation-inner {
+    position: relative;
+    z-index: 1;
+    width: 930px;
+    height: 128px;
+    margin: 0 auto;
+}
+.subnavigation-inner .listcutter {
+    overflow: hidden;
+    width: 810px;
+    margin: 0 auto;
+}
+.subnavigation-inner .snb-control {
+    display: block;
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    width: 138px;
+    height: 23px;
+    margin-left: -69px;
+    padding: 0;
+}
+</style>
+</head>
+<body>
+	<br>
+	<br>
+	<br>
+
+		<div style="width: 930px; margin: 0px auto 0px;">
+			<div class="Btn">
+				<img src="<c:url value="/img/jinjoo/b0.png" />" /> <br> <br>
+			</div>
+			<div class="Bte">
+				<img src="<c:url value="/img/jinjoo/b1.png" />" />
+			</div>
+			<img src="<c:url value="/img/jinjoo/b5.png" />" /> 
+		</div>
+<div id="container">
+	<div id="subnavigation-wrap">
+		<div class="subnavigation-inner">
+			<div class="listcutter" style="width: 324px;">
+				<div class="listcutter-inner" style="width: 324px;">
+					<ul id="sub-navigation" class="col1" style="width: 324px;">
+		                <li>
+		                	<a href="/DreamProject/faq/faq">
+		                		<img src="/DreamProject/img/global_menu/snb_global_menu04_01_out.gif" alt="FAQ"></a></li>
+		                <li style="background: none;">
+		                	<a href="/DreamProject/question/qna">
+		                		<img src="/DreamProject/img/global_menu/snb_global_menu04_02_out.gif" alt="Qamp;A"></a></li>
+					</ul>
+					<div style="clear:both;"></div>
+				</div>
+			</div>
+			<a href="#" class="snb-control">
+				<img src="/DreamProject/img/global_menu/btn_control_up.gif" alt="스크롤 올리기" />
+			</a>
+		</div>
+	</div>
+	<div id="article">
+		<div class="faq-best-stats">
+			<div class="title-area">
+				<img src="<c:url value="/img/global_menu/h5_global_menu04_01.gif"/>"/>
+				<img src="<c:url value="/img/global_menu/h5_global_menu04_01_desc.gif"/>"/>
+				<a href="#"><img src="<c:url value="/img/global_menu/btn_my_qna.gif"/>"/></a>
+				<div style="clear:left"></div>
+			</div>
+			<div class="title-area2">
+				<ol>
+					<c:forEach items="${frequentFaqList}" var="faqVO">
+					<li>
+						<a href="javascript:searchFaqById(${faqVO.faqId});"><b>[${faqVO.faqCategoryName}]</b>${faqVO.questionContent }</a></li>
+					</c:forEach>
+				</ol>
+			</div>
+			<div class="customer_inquiry_information"> 
+				<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_01.gif"/>"/></a>
+				<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_02.gif"/>"/></a>
+				<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_03.gif"/>"/></a>
+				<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_04.gif"/>"/></a>
+				<div style="clear:left"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<form id="faqForm" method="post" action="">
+	<div class="toggle_list_wrap subsection">
+		<input type="hidden" name="questionContent" value="${faqSearchVO.questionContent}"></input>
+		<input type="hidden" name="faqCategoryName" value="${faqSearchVO.faqCategoryName}"></input>
+		<input type="hidden" name="faqId" value="${faqSearchVO.faqId}"></input>
+		<c:forEach items="${faqList}" var="faqVO">
+			<div class="row-wrap">
+				<div class="row">
+					<div class="num" title="번호">${faqVO.faqId }</div>
+					<div class="sort" title="구분">${faqVO.faqCategoryName }</div>
+					<div class="subject" title="제목">
+						<a href="#none">${faqVO.questionContent }</a>
+					</div>
+				</div>
+				<div class="answer answer-on">
+					${faqVO.answerContent }
+				</div>
+			</div>
+		</c:forEach>
+	</div>
+	<div class="paging">
+		${pager}
+	</div>
+	<div class="list-search-form">
+		<select name="selectQuestionContent" id="selectQuestionContent" title="검색 항목 선택">
+			<option value="">전체</option>
+			<option value="차량구매">차량구매</option>
+			<option value="차량정비">차량정비</option>
+			<option value="정비예약">정비예약</option>
+			<option value="홈페이지">홈페이지</option>
+			<option value="카탈로그초기화">카탈로그초기화</option>
+			<option value="칭찬하기">칭찬하기</option>
+			<option value="전기차">전기차</option>
+		</select>
+				
+		<input type="text" class="text" name="inputQuestionContent" id="inputQuestionContent" style="width:227px;" title="검색어 입력">
+					
+		<input type="image" src="/DreamProject/img/FaqList/btn_search03.gif"  alt="검색"  onclick="javascript:searchFaq();" >
+			
+	</div>
+</form>
+		<div style="margin:0px auto;width:930px;">
+			<!-- category-sort-select-wrap 시작 -->
+			<link rel="stylesheet" href="<c:url value="/css/category-sort-select-wrap.css"/>" />
+			<div class="category-sort-select-wrap">
+				<p><img src="<c:url value="/img/global_menu/txt_global_menu04_01.gif"/>" style="vertical-align:middle;"/>&nbsp;(회원가입 및 로그인 후 이용하실 수 있습니다.)</p>
+				<div class="category-sort-select">
+					<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_05.gif"/>"/></a>
+					<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_06.gif"/>"/></a>
+					<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_07.gif"/>"/></a>
+					<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_08.gif"/>"/></a>
+					<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_11.gif"/>"/></a>
+					<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_13.gif"/>"/></a>
+					<a href="#"><img src="<c:url value="/img/global_menu/img_global_menu04_14.gif"/>"/></a>
+				</div>
+				<div style="clear:left"></div>
+			</div>
+		</div>
+	<jsp:include page="/WEB-INF/view/common/footer.jsp" />
+</body>
+</html>

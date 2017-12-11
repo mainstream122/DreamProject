@@ -1,0 +1,7 @@
+package com.ktds.question.service;
+
+import com.ktds.question.vo.QuestionVO;
+
+public interface QuestionService {
+	public boolean createNewQuestion(QuestionVO questionVO);
+}

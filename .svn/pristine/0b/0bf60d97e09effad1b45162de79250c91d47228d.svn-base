@@ -1,0 +1,94 @@
+package com.ktds.member.vo;
+
+public class MemberVO {
+	
+	private String id;
+	private String password;
+	private String name;
+	private String email;
+	private String mobileNo;
+	private String address;
+	private String hmpgAgrmntYN;
+	private String prsnInfoClctnAgrmntYN;
+	private String prsnInfoLeaveAgrmntYN;
+	private String smsSpamYN;
+	private String emailSpamYN;
+	private String mobileSpamYN;
+	
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getMobileNo() {
+		return mobileNo;
+	}
+	public void setMobileNo(String mobileNo) {
+		this.mobileNo = mobileNo;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getHmpgAgrmntYN() {
+		return hmpgAgrmntYN;
+	}
+	public void setHmpgAgrmntYN(String hmpgAgrmntYN) {
+		this.hmpgAgrmntYN = hmpgAgrmntYN;
+	}
+	public String getPrsnInfoClctnAgrmntYN() {
+		return prsnInfoClctnAgrmntYN;
+	}
+	public void setPrsnInfoClctnAgrmntYN(String prsnInfoClctnAgrmntYN) {
+		this.prsnInfoClctnAgrmntYN = prsnInfoClctnAgrmntYN;
+	}
+	public String getPrsnInfoLeaveAgrmntYN() {
+		return prsnInfoLeaveAgrmntYN;
+	}
+	public void setPrsnInfoLeaveAgrmntYN(String prsnInfoLeaveAgrmntYN) {
+		this.prsnInfoLeaveAgrmntYN = prsnInfoLeaveAgrmntYN;
+	}
+	public String getSmsSpamYN() {
+		return smsSpamYN;
+	}
+	public void setSmsSpamYN(String smsSpamYN) {
+		this.smsSpamYN = smsSpamYN;
+	}
+	public String getEmailSpamYN() {
+		return emailSpamYN;
+	}
+	public void setEmailSpamYN(String emailSpamYN) {
+		this.emailSpamYN = emailSpamYN;
+	}
+	public String getMobileSpamYN() {
+		return mobileSpamYN;
+	}
+	public void setMobileSpamYN(String mobileSpamYN) {
+		this.mobileSpamYN = mobileSpamYN;
+	}
+	
+	
+	
+}
